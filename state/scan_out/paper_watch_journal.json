@@ -1,7 +1,7 @@
 {
   "version": 1,
   "book": "watch",
-  "updated_shanghai": "2026-11-13 17:48:04",
+  "updated_shanghai": "2026-11-13 18:19:58",
   "equity": 1.0087061421506671,
   "equity_start": 1.0,
   "risk_pct": 0.005,
@@ -82,7 +82,7 @@
       "t1_time": null,
       "remaining": 1.0,
       "bars_used": 153,
-      "note": "纸面单仍持有，尚未触及止损或 1.0H。",
+      "note": "纸面单仍持有，尚未触及止损或 1.0H。 本次更新未取到K线，保持原状态。",
       "equity_applied": false,
       "last_px": 0.002226,
       "last_time": "2026-11-13 17:30",
@@ -164,5 +164,8 @@
       "missed_condition": "rs_macd",
       "missed_text": "右肩没有 MACD 转弱（无死叉、无柱体连缩、无头对左肩背离）"
     }
+  ],
+  "last_fetch_errors": [
+    "JCTUSDT: SourceUnavailable"
   ]
 }
