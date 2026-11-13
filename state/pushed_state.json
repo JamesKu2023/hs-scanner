@@ -142,6 +142,13 @@
       "status": "可入场",
       "tier": "htf",
       "timeframe": "4h"
+    },
+    "ARBUSDT|观察|2026-11-13 15:45|2026-11-13 22:30|2026-11-14 01:30": {
+      "first_pushed": "2026-11-14 04:33:52",
+      "symbol": "ARBUSDT",
+      "exchange": "binance",
+      "status": "观察",
+      "tier": "watch"
     }
   }
 }
