@@ -1216,6 +1216,22 @@ def daemon_step(now: datetime, target: datetime, late_sec: float) -> str:
     return "run"
 
 
+def sync_state_if_standby() -> None:
+    """Box in standby (GitHub is the primary pusher): mirror GitHub's ledgers / dedupe each cycle."""
+    if IS_GITHUB or not push_disabled():
+        return
+    script = HERE / "sync_state_from_github.py"
+    if not script.exists():
+        return
+    try:
+        out = subprocess.run([str(VENV_PY), str(script)], cwd=str(HERE), capture_output=True,
+                             text=True, timeout=150)
+        log((out.stdout or out.stderr or "").strip().splitlines()[-1:][0] if (out.stdout or out.stderr)
+            else f"state sync rc={out.returncode}")
+    except Exception as e:  # noqa: BLE001
+        log(f"state sync error: {type(e).__name__}: {e}")
+
+
 def daemon() -> int:
     if PID_PATH.exists():
         try:
@@ -1268,10 +1284,12 @@ def daemon() -> int:
             log(f"htf catch-up added {','.join(extra)} (latest closed bar not yet in signals.json)")
         write_heartbeat("scanning", nxt, {"scan_started_shanghai": now.strftime("%Y-%m-%d %H:%M:%S"),
                                           "htf_tfs": htf, "htf_catchup": extra})
+        sync_state_if_standby()
         try:
             run_once(htf_tfs=htf)
         except Exception:
             log("daemon iteration error:\n" + traceback.format_exc())
+        sync_state_if_standby()
         write_heartbeat("idle", None)
 
 
