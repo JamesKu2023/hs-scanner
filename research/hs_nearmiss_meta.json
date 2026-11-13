@@ -1,0 +1,61 @@
+{
+  "locked_before_results": true,
+  "locked_at_shanghai": "2026-11-11 14:41:00+08:00",
+  "purpose": "15m 头肩『观察』档（near-miss）：给三栋更多机会、但不改已验证的正式规则。三栋 2026-11-11 已同意作为人工裁量档（建议风险 0.5%）。",
+  "do_not_change": "正式规则（hs_15m_breakout_quality.md、hs_opt_strategy.scan_line、阈值）一律不改。不下单。",
+  "formal_reference": "正式信号 = scan_line 每个头的首个破位 sig_breakout，q_breakout=True 且 measured_ok。",
+  "hard_conditions_unchanged": [
+    "v2.0 几何：峰（PEAK_DISTANCE=5、prominence）、MIN_SPAN 12 ≤ R−L ≤ MAX_SPAN 80、头为 [L,R] 最高、头超出两肩 ≥ max(0.5ATR[H], 0.3%·close)、右肩−左肩 ≤ 1.5ATR[R]、谷间距 ≥ 3",
+    "破位棒：阴线且收盘 < 破位位、RSI<50、MACD 破位条件、量比 > λ=1.5、24 根内、期间不破头高",
+    "1H 明显偏多禁空（数据不足视为禁空）",
+    "止损/入场：make_signal（右肩/摆动高 + 0.5ATR，止损 > 入场）",
+    "measured_ok：止损 > 入场 > 1.0H 目标 且 R:R ≥ 1.5",
+    "离场同正式：60%@1.0H、余仓 1.5H、T1 后保本"
+  ],
+  "soft_conditions": {
+    "neck_flat": {
+      "formal": "|右谷−左谷|/ATR[R] ≤ 0.75",
+      "near_miss": "0.75 < x ≤ 1.00"
+    },
+    "head_rs": {
+      "formal": "(头高−右肩高)/ATR[H] ≥ 1.00",
+      "near_miss": "0.75 ≤ x < 1.00"
+    },
+    "shoulder_sym": {
+      "formal": "|右肩高−左肩高|/ATR[R] ≤ 0.75",
+      "near_miss": "0.75 < x ≤ 1.00"
+    },
+    "rs_volume": {
+      "formal": "vol_part(R) ≤ min(vol_part(H), vol_part(L))",
+      "near_miss": "比值 vol_part(R)/min(...) 在 (1.00, 1.20]"
+    },
+    "rs_macd": {
+      "formal": "macd_rs_ok（右肩附近死叉 / 柱缩 3 根 / 头对左肩 MACD 背离 三选一）",
+      "near_miss": "三项都没有（二元条件，缺失即算差一条）"
+    }
+  },
+  "selection": "对每个『不是正式信号』的头，按 scan_line 相同顺序遍历 (L,R)：只考虑 5 个软条件全部『通过或在容差内』的组合（即最多差一条），取第一个出现有效破位的 (L,R,t) 作为该头的候选；若该候选恰好差 1 条软条件且 measured_ok，则为观察信号；差 0 条（正式规则因首破位挑法没选中的）或不满足 measured_ok 不算。同一品种若正式信号的入场时间与之相同，丢弃观察（正式优先）。",
+  "universe": "orig30（data/universe.json，与正式回测同一宇宙）",
+  "split": "2025-09-06 23:49:30+00:00",
+  "forward_start": "2026-11-01 00:00:00+00:00",
+  "costs": "taker 0.05%/边；滑点 BTC/ETH 2bps、其他 5bps（同 simulate_trade partial60_1.5H）",
+  "risk": "1%/笔，同时最多 2 笔（回测口径，与正式同口径）；实盘建议 0.5%",
+  "report": [
+    "IS/OOS 笔数",
+    "平均 R",
+    "PF",
+    "去掉最大两笔后平均 R",
+    "1% 风险回撤",
+    "每周笔数",
+    "按差的那一条分组"
+  ],
+  "decision_rule": "仅供参考，不作晋升。若 OOS 平均 R < −0.10R：明确标红，建议实盘风险减半到 0.5%（本档默认已是 0.5%），并建议三栋谨慎或暂停跟单。",
+  "live": {
+    "status": "观察",
+    "tier": "watch",
+    "suggested_risk_pct": 0.5,
+    "daily_cap_beijing": null,
+    "suppressed_when_formal_breaker_tripped": true,
+    "separate_paper_book": "scan_out/paper_watch_journal.json / paper_watch_trades.csv / paper_watch_journal.md"
+  }
+}

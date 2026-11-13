@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "book": "nested15m",
+  "updated_shanghai": "2026-11-13 17:33:03",
+  "equity": 1.0,
+  "equity_start": 1.0,
+  "risk_pct": 0.005,
+  "max_concurrent": 2,
+  "breaker": {
+    "tripped": false,
+    "reason": "",
+    "trip_date": null,
+    "notice_sent_date": null,
+    "day_R": 0.0,
+    "loss_streak": 0,
+    "resume_note": "次日北京时间第一个扫描（09:02）自动恢复推送；当日 −3R 计数按日历日清零；连亏计数保留到之后出现盈利平仓，但次日仍允许重新推送。"
+  },
+  "trades": []
+}

@@ -1,0 +1,350 @@
+{
+  "asof_utc": "2026-11-10T15:38:29Z",
+  "asof_shanghai": "2026-11-10 23:38",
+  "rules": {
+    "market": "Binance USDT-M perpetual",
+    "exclude_stable_bases": [
+      "AEUR",
+      "BFUSD",
+      "BUSD",
+      "DAI",
+      "EUR",
+      "EURI",
+      "FDUSD",
+      "GUSD",
+      "PAX",
+      "PYUSD",
+      "TUSD",
+      "USD",
+      "USD1",
+      "USDC",
+      "USDD",
+      "USDE",
+      "USDP",
+      "USDT",
+      "UST",
+      "USTC",
+      "XUSD"
+    ],
+    "top_n_by_24h_quote_volume": 30,
+    "max_abs_funding_per_8h": 0.001,
+    "min_history_days": 14,
+    "slippage_bps": {
+      "BTCUSDT": 2,
+      "ETHUSDT": 2,
+      "others": 5
+    }
+  },
+  "excluded_counts": {
+    "not_usdt_perp": 283,
+    "stable": 2,
+    "not_trading": 137,
+    "short_history": 0,
+    "extreme_funding": 8,
+    "no_ticker": 0
+  },
+  "n_eligible_before_top": 512,
+  "n": 30,
+  "symbols": [
+    {
+      "symbol": "BTCUSDT",
+      "base_asset": "BTC",
+      "quote_volume_24h": 11055240504.0,
+      "funding_rate": 6.234e-05,
+      "funding_rate_pct_8h": 0.006234,
+      "slippage_bps": 2,
+      "onboard_date_utc": "2019-09-08",
+      "rank": 1
+    },
+    {
+      "symbol": "ETHUSDT",
+      "base_asset": "ETH",
+      "quote_volume_24h": 8287082606.92,
+      "funding_rate": 4.58e-06,
+      "funding_rate_pct_8h": 0.000458,
+      "slippage_bps": 2,
+      "onboard_date_utc": "2019-11-27",
+      "rank": 2
+    },
+    {
+      "symbol": "ZECUSDT",
+      "base_asset": "ZEC",
+      "quote_volume_24h": 1994901096.79,
+      "funding_rate": 2.41e-05,
+      "funding_rate_pct_8h": 0.00241,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-02-05",
+      "rank": 3
+    },
+    {
+      "symbol": "SOLUSDT",
+      "base_asset": "SOL",
+      "quote_volume_24h": 1500771887.1085,
+      "funding_rate": 1.698e-05,
+      "funding_rate_pct_8h": 0.001698,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-09-14",
+      "rank": 4
+    },
+    {
+      "symbol": "XRPUSDT",
+      "base_asset": "XRP",
+      "quote_volume_24h": 878641330.4311,
+      "funding_rate": 5.476e-05,
+      "funding_rate_pct_8h": 0.005476,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-01-06",
+      "rank": 5
+    },
+    {
+      "symbol": "JCTUSDT",
+      "base_asset": "JCT",
+      "quote_volume_24h": 654731498.631965,
+      "funding_rate": 0.00037601,
+      "funding_rate_pct_8h": 0.037601,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-11-10",
+      "rank": 6
+    },
+    {
+      "symbol": "HYPEUSDT",
+      "base_asset": "HYPE",
+      "quote_volume_24h": 529230023.96183,
+      "funding_rate": 5e-05,
+      "funding_rate_pct_8h": 0.005,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-05-30",
+      "rank": 7
+    },
+    {
+      "symbol": "1000PEPEUSDT",
+      "base_asset": "1000PEPE",
+      "quote_volume_24h": 481044012.6508063,
+      "funding_rate": 0.0001,
+      "funding_rate_pct_8h": 0.01,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2023-05-05",
+      "rank": 8
+    },
+    {
+      "symbol": "NEARUSDT",
+      "base_asset": "NEAR",
+      "quote_volume_24h": 328897786.857,
+      "funding_rate": 0.0001,
+      "funding_rate_pct_8h": 0.01,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-10-15",
+      "rank": 9
+    },
+    {
+      "symbol": "PIEVERSEUSDT",
+      "base_asset": "PIEVERSE",
+      "quote_volume_24h": 247169756.6883,
+      "funding_rate": 0.00023768,
+      "funding_rate_pct_8h": 0.023767999999999997,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-11-14",
+      "rank": 10
+    },
+    {
+      "symbol": "DOGEUSDT",
+      "base_asset": "DOGE",
+      "quote_volume_24h": 233661864.47464,
+      "funding_rate": 6.028e-05,
+      "funding_rate_pct_8h": 0.0060279999999999995,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-07-10",
+      "rank": 11
+    },
+    {
+      "symbol": "BNBUSDT",
+      "base_asset": "BNB",
+      "quote_volume_24h": 224234800.328,
+      "funding_rate": 1.78e-05,
+      "funding_rate_pct_8h": 0.00178,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-02-10",
+      "rank": 12
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "base_asset": "AVAX",
+      "quote_volume_24h": 201424274.969,
+      "funding_rate": -2.221e-05,
+      "funding_rate_pct_8h": -0.002221,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-09-23",
+      "rank": 13
+    },
+    {
+      "symbol": "AKEUSDT",
+      "base_asset": "AKE",
+      "quote_volume_24h": 186530147.5462455,
+      "funding_rate": 5e-05,
+      "funding_rate_pct_8h": 0.005,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-09-26",
+      "rank": 14
+    },
+    {
+      "symbol": "UNIUSDT",
+      "base_asset": "UNI",
+      "quote_volume_24h": 166847392.147,
+      "funding_rate": 0.0001,
+      "funding_rate_pct_8h": 0.01,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-09-18",
+      "rank": 15
+    },
+    {
+      "symbol": "ONUSDT",
+      "base_asset": "ON",
+      "quote_volume_24h": 152756346.1385,
+      "funding_rate": 5e-05,
+      "funding_rate_pct_8h": 0.005,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-10-24",
+      "rank": 16
+    },
+    {
+      "symbol": "ENAUSDT",
+      "base_asset": "ENA",
+      "quote_volume_24h": 145915437.76444,
+      "funding_rate": 5e-05,
+      "funding_rate_pct_8h": 0.005,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2024-04-02",
+      "rank": 17
+    },
+    {
+      "symbol": "SUIUSDT",
+      "base_asset": "SUI",
+      "quote_volume_24h": 138220117.53372,
+      "funding_rate": -2.85e-06,
+      "funding_rate_pct_8h": -0.000285,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2023-05-03",
+      "rank": 18
+    },
+    {
+      "symbol": "AAVEUSDT",
+      "base_asset": "AAVE",
+      "quote_volume_24h": 111078397.052,
+      "funding_rate": 1.697e-05,
+      "funding_rate_pct_8h": 0.001697,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-10-16",
+      "rank": 19
+    },
+    {
+      "symbol": "EDGEUSDT",
+      "base_asset": "EDGE",
+      "quote_volume_24h": 106725006.9115,
+      "funding_rate": 6.235e-05,
+      "funding_rate_pct_8h": 0.006235,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2026-03-19",
+      "rank": 20
+    },
+    {
+      "symbol": "ARBUSDT",
+      "base_asset": "ARB",
+      "quote_volume_24h": 104799615.761459,
+      "funding_rate": -5.231e-05,
+      "funding_rate_pct_8h": -0.0052309999999999995,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2023-03-23",
+      "rank": 21
+    },
+    {
+      "symbol": "ADAUSDT",
+      "base_asset": "ADA",
+      "quote_volume_24h": 101834664.9184,
+      "funding_rate": 4.223e-05,
+      "funding_rate_pct_8h": 0.004223,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-01-31",
+      "rank": 22
+    },
+    {
+      "symbol": "LINKUSDT",
+      "base_asset": "LINK",
+      "quote_volume_24h": 93296269.76,
+      "funding_rate": 0.0001,
+      "funding_rate_pct_8h": 0.01,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2020-01-17",
+      "rank": 23
+    },
+    {
+      "symbol": "ONDOUSDT",
+      "base_asset": "ONDO",
+      "quote_volume_24h": 90937253.51499,
+      "funding_rate": 2.654e-05,
+      "funding_rate_pct_8h": 0.002654,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2024-01-20",
+      "rank": 24
+    },
+    {
+      "symbol": "WLDUSDT",
+      "base_asset": "WLD",
+      "quote_volume_24h": 89247840.3756,
+      "funding_rate": 3.048e-05,
+      "funding_rate_pct_8h": 0.003048,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2023-07-24",
+      "rank": 25
+    },
+    {
+      "symbol": "ARIAUSDT",
+      "base_asset": "ARIA",
+      "quote_volume_24h": 85154103.30994,
+      "funding_rate": 0.00080543,
+      "funding_rate_pct_8h": 0.080543,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-09-03",
+      "rank": 26
+    },
+    {
+      "symbol": "INJUSDT",
+      "base_asset": "INJ",
+      "quote_volume_24h": 83863028.9252,
+      "funding_rate": 0.0001,
+      "funding_rate_pct_8h": 0.01,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2022-08-16",
+      "rank": 27
+    },
+    {
+      "symbol": "PAXGUSDT",
+      "base_asset": "PAXG",
+      "quote_volume_24h": 80457366.1289,
+      "funding_rate": 1.983e-05,
+      "funding_rate_pct_8h": 0.001983,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-03-27",
+      "rank": 28
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "base_asset": "TRUMP",
+      "quote_volume_24h": 79770085.51941,
+      "funding_rate": 5e-05,
+      "funding_rate_pct_8h": 0.005,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-01-18",
+      "rank": 29
+    },
+    {
+      "symbol": "PUMPUSDT",
+      "base_asset": "PUMP",
+      "quote_volume_24h": 77417799.443263,
+      "funding_rate": 4.12e-06,
+      "funding_rate_pct_8h": 0.00041200000000000004,
+      "slippage_bps": 5,
+      "onboard_date_utc": "2025-07-10",
+      "rank": 30
+    }
+  ]
+}
