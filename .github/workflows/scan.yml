@@ -4,7 +4,7 @@ on:
   schedule:
     # UTC cron, same minutes as the box daemon (:02 :17 :32 :47). GitHub may start a run late.
     # (re-registered 2026-11-13 19:2x Beijing)
-    - cron: "2,17,32,47 * * * *"
+    - cron: "3,18,33,48 * * * *"
   workflow_dispatch:
     inputs:
       force_15m:
