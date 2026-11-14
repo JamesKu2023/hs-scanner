@@ -149,6 +149,63 @@
       "exchange": "binance",
       "status": "观察",
       "tier": "watch"
+    },
+    "NEARUSDT|可入场|2026-11-13 15:15|2026-11-13 21:30|2026-11-14 00:15": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "NEARUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "formal"
+    },
+    "NEAR-USDT-SWAP|可入场|2026-11-13 15:15|2026-11-13 21:30|2026-11-14 00:15": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "NEAR-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "formal"
+    },
+    "1000PEPEUSDT|已破位·等回踩|2026-11-13 18:15|2026-11-13 21:30|2026-11-13 23:45": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "1000PEPEUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "watch"
+    },
+    "SUIUSDT|已破位·等回踩|2026-11-13 18:15|2026-11-13 21:30|2026-11-14 01:30": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "SUIUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "watch"
+    },
+    "XRPUSDT|观察|2026-11-13 15:15|2026-11-13 21:30|2026-11-14 01:30": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "XRPUSDT",
+      "exchange": "binance",
+      "status": "观察",
+      "tier": "watch"
+    },
+    "LINK-USDT-SWAP|观察|2026-11-13 15:00|2026-11-13 21:30|2026-11-14 01:30": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "LINK-USDT-SWAP",
+      "exchange": "okx",
+      "status": "观察",
+      "tier": "watch"
+    },
+    "ARB-USDT-SWAP|观察|2026-11-13 15:30|2026-11-13 22:30|2026-11-14 01:30": {
+      "first_pushed": "2026-11-14 09:02:55",
+      "symbol": "ARB-USDT-SWAP",
+      "exchange": "okx",
+      "status": "观察",
+      "tier": "watch"
+    },
+    "1h|SOPH-USDT-SWAP|可入场|2026-11-14 00:00": {
+      "first_pushed": "2026-11-14 09:04:02",
+      "symbol": "SOPH-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
     }
   }
 }
