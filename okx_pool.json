@@ -1,6 +1,6 @@
 {
-  "asof_utc": "2026-11-13T20:33:20Z",
-  "asof_shanghai": "2026-11-14 04:33",
+  "asof_utc": "2026-11-14T23:19:20Z",
+  "asof_shanghai": "2026-11-15 07:19",
   "rules": {
     "market": "OKX USDT-margined perpetual swap (instType=SWAP, *-USDT-SWAP)",
     "top_n_by_24h_quote_volume": 30,
@@ -16,218 +16,218 @@
     "not_crypto": 239,
     "not_live": 3,
     "short_history": 0,
-    "extreme_funding": 2
+    "extreme_funding": 3
   },
   "symbols": [
     {
       "instId": "BTC-USDT-SWAP",
       "base": "BTC",
-      "quote_volume_24h": 10491826844.746,
-      "last": 68894.8,
-      "funding_rate": 7.65539129579e-05
+      "quote_volume_24h": 9785004036.16452,
+      "last": 63721.1,
+      "funding_rate": -4.28048766528e-05
     },
     {
       "instId": "ETH-USDT-SWAP",
       "base": "ETH",
-      "quote_volume_24h": 8030978465.371599,
-      "last": 1946.8,
-      "funding_rate": 3.7250497305e-05
+      "quote_volume_24h": 8942641036.4623,
+      "last": 1746.31,
+      "funding_rate": -0.0001049668197676
+    },
+    {
+      "instId": "SOL-USDT-SWAP",
+      "base": "SOL",
+      "quote_volume_24h": 1459876037.648,
+      "last": 69.44,
+      "funding_rate": -0.0001136653222328
     },
     {
       "instId": "ZEC-USDT-SWAP",
       "base": "ZEC",
-      "quote_volume_24h": 1342816154.208,
-      "last": 956.32,
+      "quote_volume_24h": 1269919814.9903998,
+      "last": 850.29,
+      "funding_rate": 2.96782718316e-05
+    },
+    {
+      "instId": "XRP-USDT-SWAP",
+      "base": "XRP",
+      "quote_volume_24h": 420094577.241,
+      "last": 0.9015,
+      "funding_rate": 9.3213652026e-06
+    },
+    {
+      "instId": "HYPE-USDT-SWAP",
+      "base": "HYPE",
+      "quote_volume_24h": 383427627.5025,
+      "last": 62.685,
       "funding_rate": 0.0001
     },
     {
       "instId": "AKE-USDT-SWAP",
       "base": "AKE",
-      "quote_volume_24h": 1015160702.4208001,
-      "last": 0.012472,
-      "funding_rate": -0.0007372364072648
-    },
-    {
-      "instId": "SOL-USDT-SWAP",
-      "base": "SOL",
-      "quote_volume_24h": 938437670.9844,
-      "last": 80.18,
-      "funding_rate": 0.0001
-    },
-    {
-      "instId": "XRP-USDT-SWAP",
-      "base": "XRP",
-      "quote_volume_24h": 298508271.084,
-      "last": 1.026,
-      "funding_rate": 8.87736758947e-05
-    },
-    {
-      "instId": "PEPE-USDT-SWAP",
-      "base": "PEPE",
-      "quote_volume_24h": 260136481.8416,
-      "last": 4.4114e-06,
-      "funding_rate": -7.14015090835e-05
-    },
-    {
-      "instId": "HYPE-USDT-SWAP",
-      "base": "HYPE",
-      "quote_volume_24h": 243111054.54999998,
-      "last": 72.625,
-      "funding_rate": 2.74274569293e-05
+      "quote_volume_24h": 371988109.3845,
+      "last": 0.011945,
+      "funding_rate": -7.6892684077e-05
     },
     {
       "instId": "DOGE-USDT-SWAP",
       "base": "DOGE",
-      "quote_volume_24h": 225407345.19030002,
-      "last": 0.06543,
-      "funding_rate": 8.79693345505e-05
+      "quote_volume_24h": 331706519.38740003,
+      "last": 0.05646,
+      "funding_rate": -3.38671560457e-05
+    },
+    {
+      "instId": "PEPE-USDT-SWAP",
+      "base": "PEPE",
+      "quote_volume_24h": 215338107.14880002,
+      "last": 3.7952e-06,
+      "funding_rate": -0.0001686053323578
     },
     {
       "instId": "NEAR-USDT-SWAP",
       "base": "NEAR",
-      "quote_volume_24h": 133254767.77999999,
-      "last": 3.53,
-      "funding_rate": 0.0001
+      "quote_volume_24h": 139674000.718,
+      "last": 2.963,
+      "funding_rate": -4.05165318113e-05
     },
     {
       "instId": "UNI-USDT-SWAP",
       "base": "UNI",
-      "quote_volume_24h": 97680734.928,
-      "last": 5.814,
-      "funding_rate": 8.9307908312e-05
+      "quote_volume_24h": 119130289.15799999,
+      "last": 4.749,
+      "funding_rate": 9.4110181723e-06
     },
     {
       "instId": "WLD-USDT-SWAP",
       "base": "WLD",
-      "quote_volume_24h": 78065008.57800001,
-      "last": 0.2983,
-      "funding_rate": -3.55370399742e-05
-    },
-    {
-      "instId": "BNB-USDT-SWAP",
-      "base": "BNB",
-      "quote_volume_24h": 74370756.18180001,
-      "last": 637.46,
-      "funding_rate": 6.32707049208e-05
-    },
-    {
-      "instId": "SUI-USDT-SWAP",
-      "base": "SUI",
-      "quote_volume_24h": 71142402.2578,
-      "last": 0.8051,
-      "funding_rate": 7.50700225403e-05
+      "quote_volume_24h": 93238207.3722,
+      "last": 0.2486,
+      "funding_rate": -0.0004240701620564
     },
     {
       "instId": "PUMP-USDT-SWAP",
       "base": "PUMP",
-      "quote_volume_24h": 71123018.37,
-      "last": 0.003505,
-      "funding_rate": 4.92584419969e-05
+      "quote_volume_24h": 89691427.92999999,
+      "last": 0.002858,
+      "funding_rate": -0.0001002799762792
     },
     {
-      "instId": "LIT-USDT-SWAP",
-      "base": "LIT",
-      "quote_volume_24h": 59664187.1408,
-      "last": 3.2153,
-      "funding_rate": 5e-05
+      "instId": "SUI-USDT-SWAP",
+      "base": "SUI",
+      "quote_volume_24h": 84676694.07959999,
+      "last": 0.6867,
+      "funding_rate": -0.0001800577684363
     },
     {
       "instId": "TRUMP-USDT-SWAP",
       "base": "TRUMP",
-      "quote_volume_24h": 50724643.6303,
-      "last": 1.097,
-      "funding_rate": 5e-05
+      "quote_volume_24h": 74691029.5398,
+      "last": 0.914,
+      "funding_rate": -0.0002760597077086
     },
     {
-      "instId": "ENA-USDT-SWAP",
-      "base": "ENA",
-      "quote_volume_24h": 44286200.4948,
-      "last": 0.13596,
-      "funding_rate": -7.5690751305e-06
+      "instId": "BNB-USDT-SWAP",
+      "base": "BNB",
+      "quote_volume_24h": 74484485.71,
+      "last": 577.0,
+      "funding_rate": -2.89983107059e-05
+    },
+    {
+      "instId": "LIT-USDT-SWAP",
+      "base": "LIT",
+      "quote_volume_24h": 61244246.1184,
+      "last": 2.7904,
+      "funding_rate": 5e-05
     },
     {
       "instId": "BCH-USDT-SWAP",
       "base": "BCH",
-      "quote_volume_24h": 42199317.294,
-      "last": 225.38,
-      "funding_rate": -3.90098437911e-05
+      "quote_volume_24h": 57185331.024500005,
+      "last": 199.15,
+      "funding_rate": -0.0002455144358794
     },
     {
       "instId": "ADA-USDT-SWAP",
       "base": "ADA",
-      "quote_volume_24h": 38454289.323,
-      "last": 0.1709,
-      "funding_rate": 0.0001
+      "quote_volume_24h": 54879402.322,
+      "last": 0.1454,
+      "funding_rate": -0.0003001553970115
     },
     {
       "instId": "LINK-USDT-SWAP",
       "base": "LINK",
-      "quote_volume_24h": 36995292.692,
-      "last": 9.976,
-      "funding_rate": 1.54567324872e-05
+      "quote_volume_24h": 52971743.1864,
+      "last": 8.718,
+      "funding_rate": -9.1590864077e-05
     },
     {
-      "instId": "INJ-USDT-SWAP",
-      "base": "INJ",
-      "quote_volume_24h": 36980524.447,
-      "last": 8.165,
-      "funding_rate": 1.34499425466e-05
-    },
-    {
-      "instId": "AVAX-USDT-SWAP",
-      "base": "AVAX",
-      "quote_volume_24h": 36121462.0733,
-      "last": 8.363,
-      "funding_rate": 1.36988372438e-05
-    },
-    {
-      "instId": "AAVE-USDT-SWAP",
-      "base": "AAVE",
-      "quote_volume_24h": 33631076.7718,
-      "last": 112.82,
-      "funding_rate": -7.874272876e-06
-    },
-    {
-      "instId": "ARB-USDT-SWAP",
-      "base": "ARB",
-      "quote_volume_24h": 32891654.12851,
-      "last": 0.14501,
-      "funding_rate": 6.29537652131e-05
+      "instId": "ENA-USDT-SWAP",
+      "base": "ENA",
+      "quote_volume_24h": 49087080.12,
+      "last": 0.1128,
+      "funding_rate": -5.15502631288e-05
     },
     {
       "instId": "FIL-USDT-SWAP",
       "base": "FIL",
-      "quote_volume_24h": 32629990.03486,
-      "last": 0.7114,
-      "funding_rate": 7.91610798604e-05
+      "quote_volume_24h": 48915232.492620006,
+      "last": 0.6058,
+      "funding_rate": -3.21249793046e-05
     },
     {
       "instId": "SHELL-USDT-SWAP",
       "base": "SHELL",
-      "quote_volume_24h": 31295822.766,
-      "last": 0.04602,
-      "funding_rate": 5e-05
+      "quote_volume_24h": 41831304.4512,
+      "last": 0.02827,
+      "funding_rate": -0.0003622357773441
+    },
+    {
+      "instId": "INJ-USDT-SWAP",
+      "base": "INJ",
+      "quote_volume_24h": 40862116.1718,
+      "last": 6.762,
+      "funding_rate": -0.0002582006707431
+    },
+    {
+      "instId": "AVAX-USDT-SWAP",
+      "base": "AVAX",
+      "quote_volume_24h": 40662013.506000005,
+      "last": 7.03,
+      "funding_rate": -0.0001256513448691
     },
     {
       "instId": "LTC-USDT-SWAP",
       "base": "LTC",
-      "quote_volume_24h": 29789880.84,
-      "last": 49.65,
-      "funding_rate": -5.11587846408e-05
+      "quote_volume_24h": 39903431.799,
+      "last": 43.89,
+      "funding_rate": -5.24441439098e-05
     },
     {
-      "instId": "SOPH-USDT-SWAP",
-      "base": "SOPH",
-      "quote_volume_24h": 29732853.7405,
-      "last": 0.001717,
-      "funding_rate": -1.84755528135e-05
-    },
-    {
-      "instId": "CAP-USDT-SWAP",
-      "base": "CAP",
-      "quote_volume_24h": 25731104.375,
-      "last": 0.10625,
+      "instId": "PIEVERSE-USDT-SWAP",
+      "base": "PIEVERSE",
+      "quote_volume_24h": 38694694.5,
+      "last": 1.785,
       "funding_rate": 5e-05
+    },
+    {
+      "instId": "ASTER-USDT-SWAP",
+      "base": "ASTER",
+      "quote_volume_24h": 37159308.1321,
+      "last": 0.4991,
+      "funding_rate": -4.94300182598e-05
+    },
+    {
+      "instId": "AAVE-USDT-SWAP",
+      "base": "AAVE",
+      "quote_volume_24h": 34097716.4446,
+      "last": 98.81,
+      "funding_rate": -7.5962776376e-05
+    },
+    {
+      "instId": "ARB-USDT-SWAP",
+      "base": "ARB",
+      "quote_volume_24h": 33496545.73804,
+      "last": 0.12628,
+      "funding_rate": 0.0001
     }
   ]
 }
