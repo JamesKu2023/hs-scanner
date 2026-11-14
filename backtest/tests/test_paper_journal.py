@@ -72,18 +72,24 @@ def sig(
     }
 
 
-def run(tmp_path: Path, signals: list[dict], bars: dict[str, pd.DataFrame], now=NOW, extra_trades=None, seed_journal=None):
-    paths = pj.JournalPaths.under(tmp_path)
+def run(tmp_path: Path, signals: list[dict], bars: dict[str, pd.DataFrame], now=NOW, extra_trades=None, seed_journal=None,
+        book: str = pj.BOOK_FORMAL):
+    paths = pj.JournalPaths.under(tmp_path, book=book)
     if seed_journal is not None:
         pj.save_journal(seed_journal, paths=paths, now=now)
     elif extra_trades:
-        j = pj.empty_journal(now)
+        j = pj.empty_journal(now, book=book)
         j["trades"] = list(extra_trades)
         j["equity"] = seed_equity(extra_trades)
         pj.evaluate_breaker(j, now)
         pj.save_journal(j, paths=paths, now=now)
     data = {"signals": signals, "asof_shanghai": now.strftime("%Y-%m-%d %H:%M")}
-    return pj.update_from_scan(data, now=now, paths=paths, fetch_klines_fn=provider(bars))
+    return pj.update_from_scan(data, now=now, paths=paths, fetch_klines_fn=provider(bars), book=book)
+
+
+def v6(d: dict) -> dict:
+    """2026-11-14: the 15m breaker lives on the v6 book; v6 rows carry tier='v6'."""
+    return dict(d, tier="v6", timeframe="15m")
 
 
 def seed_equity(trades: list[dict]) -> float:
@@ -249,9 +255,10 @@ def test_daily_minus_3r_trips_and_suppresses_new_alert(tmp_path):
     }
     journal = run(
         tmp_path,
-        [sig("NEARUSDT", "2026-11-11 10:30", L="2026-11-11 08:00", H="2026-11-11 09:00", R="2026-11-11 09:45")],
+        [v6(sig("NEARUSDT", "2026-11-11 10:30", L="2026-11-11 08:00", H="2026-11-11 09:00", R="2026-11-11 09:45"))],
         bars,
         extra_trades=prior,
+        book=pj.BOOK_V6_15M,
     )
     b = journal["breaker"]
     assert b["tripped"] is True
@@ -286,7 +293,7 @@ def test_three_consecutive_losses_trip_breaker(tmp_path):
         "BTCUSDT": pd.DataFrame(),
         "ETHUSDT": pd.DataFrame(),
     }
-    journal = run(tmp_path, [sig("SOLUSDT", "2026-11-11 10:00")], bars, extra_trades=prior)
+    journal = run(tmp_path, [v6(sig("SOLUSDT", "2026-11-11 10:00"))], bars, extra_trades=prior, book=pj.BOOK_V6_15M)
     new = [t for t in journal["trades"] if t["symbol"] == "SOLUSDT"][0]
     assert new["status"] == "closed"
     assert new["account_taken"] is True
@@ -465,3 +472,21 @@ def test_csv_and_snapshot_written(tmp_path):
     md = (tmp_path / "paper_journal.md").read_text(encoding="utf-8")
     assert "不下单" in md
     assert "AAAUSDT" in md
+
+
+def test_formal_book_no_longer_trips_and_ignores_v6_rows(tmp_path):
+    """2026-11-14: old formal book never trips (breaker moved to v6) and never ingests v6 rows;
+    the v6 book ingests only v6 rows, into paper_v6_15m_*."""
+    prior = [closed("BTCUSDT", -1.1, "2026-11-11 08:00", suffix="-a"),
+             closed("ETHUSDT", -1.0, "2026-11-11 09:00", suffix="-b"),
+             closed("SOLUSDT", -1.2, "2026-11-11 09:30", suffix="-c")]
+    bars = {"NEARUSDT": frame(sh_bar("2026-11-11 10:30", 100.0, 100.6, 99.5, 99.8)),
+            "BTCUSDT": pd.DataFrame(), "ETHUSDT": pd.DataFrame(), "SOLUSDT": pd.DataFrame()}
+    j = run(tmp_path, [v6(sig("NEARUSDT", "2026-11-11 10:30"))], bars, extra_trades=prior)
+    assert j["breaker"]["tripped"] is False
+    assert not [t for t in j["trades"] if t["symbol"] == "NEARUSDT"]
+    jv = run(tmp_path, [v6(sig("NEARUSDT", "2026-11-11 10:30")), sig("ADAUSDT", "2026-11-11 10:30")], bars,
+             book=pj.BOOK_V6_15M)
+    assert [t["symbol"] for t in jv["trades"]] == ["NEARUSDT"]
+    assert jv["trades"][0]["pattern_id"].startswith("v6|15m|NEARUSDT|")
+    assert (tmp_path / "paper_v6_15m_journal.json").exists()

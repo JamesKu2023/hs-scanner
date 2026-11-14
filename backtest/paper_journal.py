@@ -47,7 +47,12 @@ BOOK_NESTED_1H = "nested1h"
 BOOK_NESTED_4H = "nested4h"
 NESTED_BOOKS = {"15m": BOOK_NESTED_15M, "1h": BOOK_NESTED_1H, "4h": BOOK_NESTED_4H}
 NESTED_BOOK_TF = {v: k for k, v in NESTED_BOOKS.items()}
-BOOK_STATUS = {BOOK_FORMAL: "可入场", BOOK_WATCH: "观察", BOOK_HTF_1H: "可入场", BOOK_HTF_4H: "可入场",
+# 2026-11-14 三栋: 15m v6 三栋认肩（未验证 0.5%）独立账本；15m 熔断改为只作用在这个账本上。
+# 旧 formal / watch 账本不再开新仓（扫描器不再产生这两档），已有持仓继续跟踪到平仓。
+BOOK_V6_15M = "v6_15m"
+TIER_V6 = "v6"
+BREAKER_BOOKS = {BOOK_V6_15M}
+BOOK_STATUS = {BOOK_V6_15M: "可入场", BOOK_FORMAL: "可入场", BOOK_WATCH: "观察", BOOK_HTF_1H: "可入场", BOOK_HTF_4H: "可入场",
                BOOK_NESTED_15M: "可入场", BOOK_NESTED_1H: "可入场", BOOK_NESTED_4H: "可入场"}
 BOOK_TIMEFRAME = {BOOK_HTF_1H: "1h", BOOK_HTF_4H: "4h"}
 WATCH_RISK_PCT = 0.005
@@ -84,6 +89,10 @@ class JournalPaths:
         return cls(OUT_DIR, WATCH_JSON, WATCH_CSV, WATCH_MD)
 
     @classmethod
+    def v6(cls) -> "JournalPaths":
+        return cls.under(OUT_DIR, book=BOOK_V6_15M)
+
+    @classmethod
     def htf(cls, tf: str) -> "JournalPaths":
         return cls.under(OUT_DIR, book=HTF_BOOKS[tf])
 
@@ -93,6 +102,8 @@ class JournalPaths:
 
     @classmethod
     def for_book(cls, book: str) -> "JournalPaths":
+        if book == BOOK_V6_15M:
+            return cls.under(OUT_DIR, book=book)
         if book in NESTED_BOOK_TF:
             return cls.under(OUT_DIR, book=book)
         if book == BOOK_WATCH:
@@ -104,6 +115,13 @@ class JournalPaths:
     @classmethod
     def under(cls, out_dir: Path, book: str = BOOK_FORMAL) -> "JournalPaths":
         out_dir = Path(out_dir)
+        if book == BOOK_V6_15M:
+            return cls(
+                out_dir=out_dir,
+                json_path=out_dir / "paper_v6_15m_journal.json",
+                csv_path=out_dir / "paper_v6_15m_trades.csv",
+                md_path=out_dir / "paper_v6_15m_journal.md",
+            )
         if book in NESTED_BOOK_TF:
             tf = NESTED_BOOK_TF[book]
             return cls(
@@ -185,6 +203,9 @@ def pattern_id(sig: dict) -> str:
     tf = sig.get("timeframe")
     if sig.get("nested_signal"):
         return "|".join(["nested", str(tf or "15m"), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
+                         str(sig.get("H_time") or "")])
+    if sig.get("tier") == TIER_V6:  # 2026-11-14: 15m v6 rows, one key per head (own namespace)
+        return "|".join(["v6", str(tf or "15m"), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
                          str(sig.get("H_time") or "")])
     if tf in ("1h", "4h"):
         return "|".join([str(tf), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
@@ -686,6 +707,7 @@ def breaker_notice_payload(journal: dict, scan_time: str | None = None, now: dat
     return {
         "test": False,
         "kind": "circuit_breaker",
+        "book": journal.get("book") or BOOK_FORMAL,
         "reason": b.get("reason") or "熔断已触发",
         "day_R": float(b.get("day_R") or 0.0),
         "loss_streak": int(b.get("loss_streak") or 0),
@@ -950,6 +972,8 @@ def update_from_scan(
             continue
         if bool(sig.get("nested_signal")) != (book in NESTED_BOOK_TF):
             continue  # nested inner signals only go to the paper_nested_* books (and only there)
+        if (sig.get("tier") == TIER_V6) != (book == BOOK_V6_15M):
+            continue  # v6 rows only go to paper_v6_15m (and only there)
         pid = pattern_id(sig)
         if pid in known:
             continue
@@ -975,12 +999,12 @@ def update_from_scan(
         known[pid] = trade
         new_ids.append(pid)
 
-    if book == BOOK_FORMAL:
+    if book in BREAKER_BOOKS:
         evaluate_breaker(journal, t)
         if (journal.get("breaker") or {}).get("tripped"):
             note_alerts_blocked(journal, new_ids)
     else:
-        # Watch book: informational only, never trips anything.
+        # Watch / old formal / HTF / nested books: never trip anything (breaker lives on v6_15m).
         b = journal.setdefault("breaker", empty_journal(book=book)["breaker"])
         b["tripped"] = False
         b["reason"] = ""
@@ -1048,7 +1072,8 @@ def render_snapshot(journal: dict, now: datetime | None = None) -> str:
     else:
         br = "未熔断，可推送新信号。"
     lines = [
-        "# 纸面交易记账（不下单）",
+        ("# 15m·v6 三栋认肩 纸面记账（未验证，0.5% 风险，不下单）" if journal.get("book") == BOOK_V6_15M
+         else "# 纸面交易记账（不下单）"),
         "",
         f"更新时间：{fmt_sh(t, with_seconds=True)}（北京时间）",
         f"账户权益：{equity:.4f}（起始 1.0000，每笔账户单按 1% 风险，平仓后权益 × (1 + pnl_R × 0.01)）",

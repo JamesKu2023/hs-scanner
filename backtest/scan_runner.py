@@ -116,6 +116,8 @@ STATUS_RETEST = "已破位·等回踩"
 TIER_FORMAL = "formal"
 TIER_WATCH = "watch"
 TIER_HTF = "htf"
+TIER_V6 = "v6"  # 2026-11-14 三栋: 15m v6 三栋认肩（未验证 0.5%），独立账本 paper_v6_15m，熔断作用于此
+V6_TIER_CN = "15m·v6 三栋认肩·未验证"
 HTF_TFS = ("1h", "4h")
 HTF_SLOT_MINUTE = 2          # first slot after the hourly close
 HTF_4H_HOURS = (0, 4, 8, 12, 16, 20)  # Beijing; == UTC 16/20/0/4/8/12 4H closes
@@ -333,6 +335,8 @@ def signal_id(sig: dict) -> str:
     tf = sig.get("timeframe") or "15m"
     if sig.get("nested_signal"):
         tf = f"nested-{tf}"
+    elif sig.get("tier") == TIER_V6:
+        tf = f"v6-{tf}"
     return "|".join([str(sig.get("exchange") or "binance"), str(sig.get("symbol") or ""), str(tf),
                      str(sig.get("H_time") or ""), str(sig.get("status") or "")])
 
@@ -344,6 +348,9 @@ def pattern_id(sig: dict) -> str:
     tf = sig.get("timeframe")
     if sig.get("nested_signal"):
         return "|".join(["nested", str(tf or "15m"), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
+                         str(sig.get("H_time") or "")])
+    if sig.get("tier") == TIER_V6:  # must match paper_journal.pattern_id
+        return "|".join(["v6", str(tf or "15m"), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
                          str(sig.get("H_time") or "")])
     if tf in HTF_TFS:
         return "|".join([str(tf), str(sig.get("symbol") or ""), str(sig.get("status") or ""),
@@ -390,7 +397,7 @@ def save_state(state: dict) -> None:
 
 def tier_of(sig: dict) -> str:
     t = sig.get("tier")
-    if t in (TIER_FORMAL, TIER_WATCH, TIER_HTF):
+    if t in (TIER_FORMAL, TIER_WATCH, TIER_HTF, TIER_V6):
         return t
     return TIER_WATCH if sig.get("status") == STATUS_OBSERVE else TIER_FORMAL
 
@@ -451,7 +458,14 @@ def build_payload(rows: list[dict], tier: str, scan_time: str, last_bar, n_watch
         "okx_error": scan_meta.get("okx_error") or "",
         "okx_note": "欧易用同一规则扫描；规则只在币安数据上回测，欧易未单独验证。",
     }
-    if tier == TIER_WATCH:
+    if tier == TIER_V6:
+        payload["validated"] = False
+        payload["suggested_risk_pct"] = 0.5
+        payload["tier_cn"] = V6_TIER_CN
+        payload["counts_toward_breaker"] = True
+        payload["disclaimer"] = ("15m·v6 三栋认肩：收盘跌破 v6 颈线后才推送；未经样本外验证，建议风险 0.5%；"
+                                 "比例分与确认 x/3 只作参考，不过滤；独立账本 paper_v6_15m，15m 熔断作用于此账本。")
+    elif tier == TIER_WATCH:
         payload["validated"] = False
         payload["suggested_risk_pct"] = 0.5
         payload["watch_alerts_today"] = n_watch_today
@@ -530,6 +544,19 @@ def summarize(sig: dict) -> dict:
         "dual_neck_tier1": sig.get("dual_neck_tier1"),
         "dual_neck_tier2": sig.get("dual_neck_tier2"),
         "dual_neck_text": sig.get("dual_neck_text"),
+        # 2026-11-14 v6 三栋认肩 (15m tier "v6"; 1H/4H rows carry v6=True). Display only.
+        "v6": bool(sig.get("v6")),
+        "tier_cn": sig.get("tier_cn"),
+        "validated": sig.get("validated"),
+        "prop_score": sig.get("prop_score"),
+        "prop_score_text": sig.get("prop_score_text"),
+        "v6_spans": sig.get("v6_spans"),
+        "v6_ratios": sig.get("v6_ratios"),
+        "confirm_n": sig.get("confirm_n"),
+        "confirm_total": sig.get("confirm_total"),
+        "confirm_x3_text": sig.get("confirm_x3_text"),
+        "break_bar_shanghai": sig.get("break_bar_shanghai"),
+        "exits": sig.get("exits"),
     }
 
 
@@ -679,6 +706,16 @@ def _cycle_15m_regular(dry_run: bool = False, journal_paths: dict | None = None,
         except Exception:
             log("watch journal update error:\n" + traceback.format_exc())
 
+        v6_paths = journal_paths.get("v6") if journal_paths else None
+        v6journal = None
+        try:
+            v6journal = paper_journal.update_from_scan(
+                data, paths=v6_paths or paper_journal.JournalPaths.v6(), book=paper_journal.BOOK_V6_15M
+            )
+            log(paper_journal.journal_log_line(v6journal))
+        except Exception:
+            log("v6 journal update error:\n" + traceback.format_exc())
+
         state = load_state()
         pushed = state["pushed"]
         fresh = [s for s in rows if pattern_id(s) not in pushed]
@@ -692,7 +729,9 @@ def _cycle_15m_regular(dry_run: bool = False, journal_paths: dict | None = None,
         if data.get("okx_ok") is False:
             log(f"OKX skipped/partial this slot: {data.get('okx_error')}")
 
-        plan = paper_journal.notification_plan(journal) if journal is not None else {
+        # 2026-11-14: the 15m circuit breaker lives on the v6 book (old formal book no longer opens trades)
+        breaker_journal = v6journal
+        plan = paper_journal.notification_plan(breaker_journal) if breaker_journal is not None else {
             "suppress_trading": False,
             "send_breaker_notice": False,
             "payload": None,
@@ -700,9 +739,10 @@ def _cycle_15m_regular(dry_run: bool = False, journal_paths: dict | None = None,
         if dry_run:
             today = now_sh().strftime("%Y-%m-%d")
             f_rows, w_rows, w_over = split_fresh(fresh, pushed, today)
+            v_rows = [s for s in fresh if tier_of(s) == TIER_V6]
             log(
                 f"DRY-RUN no webhook: breaker_suppress={bool(plan.get('suppress_trading'))} "
-                f"would_send formal={len(f_rows)} watch={len(w_rows)}"
+                f"would_send v6={len(v_rows)} formal={len(f_rows)} watch={len(w_rows)}"
             )
             return 0
         if plan.get("send_breaker_notice") and plan.get("payload"):
@@ -713,21 +753,43 @@ def _cycle_15m_regular(dry_run: bool = False, journal_paths: dict | None = None,
                 payload, styles=[style] + [s for s in AUTH_STYLES if s != style]
             )
             if 200 <= status < 300:
-                paper_journal.mark_notice_sent(journal)
+                paper_journal.mark_notice_sent(breaker_journal, paths=v6_paths or paper_journal.JournalPaths.v6())
                 log(f"circuit breaker notice sent style={style}")
             else:
                 log(f"circuit breaker notice failed HTTP {status}; will retry next run")
         if plan.get("suppress_trading"):
             # Formal breaker also silences the 观察 tier (watch book still journals).
-            log("breaker tripped; trading webhook suppressed (formal and watch)")
+            log("breaker tripped (v6 book); trading webhook suppressed (v6, formal and watch)")
             return 0
 
         if not fresh:
             return 0
         today = now_sh().strftime("%Y-%m-%d")
         f_rows, w_rows, _w_over = split_fresh(fresh, pushed, today)
+        v_rows = [s for s in fresh if tier_of(s) == TIER_V6]
         rc = 0
         ts = now_sh().strftime("%Y-%m-%d %H:%M:%S")
+        # 0) 15m v6 三栋认肩 (the only 15m rule since 2026-11-14)
+        if v_rows:
+            payload = build_payload(v_rows, TIER_V6, scan_time, data.get("last_bar_shanghai"), scan_meta=data)
+            style = remembered_auth_style() or "bearer"
+            status, style, _ = post_webhook(payload, styles=[style] + [s for s in AUTH_STYLES if s != style])
+            if 200 <= status < 300:
+                for s in v_rows:
+                    pushed[pattern_id(s)] = {
+                        "first_pushed": ts, "symbol": s.get("symbol"), "exchange": s.get("exchange") or "binance",
+                        "status": s.get("status"), "tier": TIER_V6,
+                    }
+                save_state(state)
+                if v6journal is not None:
+                    paper_journal.mark_alerted(
+                        v6journal, [pattern_id(s) for s in v_rows if s.get("status") == "可入场"],
+                        paths=v6_paths or paper_journal.JournalPaths.v6(),
+                    )
+                log(f"pushed {len(v_rows)} new v6 15m signal(s) style={style}")
+            else:
+                log(f"v6 webhook failed HTTP {status}; signals not marked pushed, will retry next run")
+                rc = 3
         # 1) formal first (priority)
         if f_rows:
             payload = build_payload(f_rows, TIER_FORMAL, scan_time, data.get("last_bar_shanghai"), scan_meta=data)

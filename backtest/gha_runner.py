@@ -33,7 +33,7 @@ sys.path.insert(0, str(HERE))
 # relative to backtest/ ; journals + dedupe + breaker state (all inside the journal json files)
 STATE_FILES = ["pushed_state.json"] + [
     f"scan_out/paper_{book}_{kind}"
-    for book in ("journal", "watch", "htf_1h", "htf_4h", "nested_15m", "nested_1h", "nested_4h")
+    for book in ("journal", "watch", "v6_15m", "htf_1h", "htf_4h", "nested_15m", "nested_1h", "nested_4h")
     for kind in ("journal.json", "trades.csv", "journal.md")
 ]
 # paper_journal.json / paper_trades.csv naming for the formal book differs:

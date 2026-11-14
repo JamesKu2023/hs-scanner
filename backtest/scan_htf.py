@@ -51,6 +51,7 @@ from hs_backtest_v2_3lines import (  # noqa: E402
     BREAK_LOOKAHEAD, MAX_SPAN, MIN_SPAN, MIN_TROUGH_GAP, _ts, htf_bullish_at, levels_at,
 )
 import hs_shoulder_v3_core as V  # noqa: E402
+import scan_v6 as S6  # noqa: E402
 import okx_market  # noqa: E402
 import scan_15m as SC  # noqa: E402
 import binance_data  # noqa: E402
@@ -148,33 +149,23 @@ def detect(df: pd.DataFrame, k: float = K_U, trace: dict | None = None) -> list[
         H = int(H); u = uu[H]
         if H < 20 or not (np.isfinite(u) and u > 0):
             continue
-        cands = ls_candidates(high, low, close, sw, nge, H, u, k)
-        if not cands:
+        # 2026-11-14 三栋: v6 认肩 (scan_v6 / research hs_v6_core). LS = deepest independent
+        # pullback on the rising leg; RS = highest bar of the post-head rebound segment.
+        P6 = S6.C6.pick_ls(high, low, sw, nge, H, u, k)
+        if P6 is None:
             continue
-        best = None; ls_cache: dict[int, int | None] = {}; run_min = np.inf; pref = {}
+        L = P6["L"]
+        W6 = S6.C6.RightWalker(high, low, H, u, k)
         forming_done = False; broken = False; retest_done = False
         for t in range(H + 1, min(n - 1, H + V.MAX_SIDE + BREAK_LOOKAHEAD) + 1):
             if high[t] > high[H]:
                 break
-            run_min = min(run_min, low[t]); pref[t] = run_min
-            p = t - V.SW_RIGHT
-            if p > H and sw[p] and p - H <= V.MAX_SIDE and high[p] < high[H]:
-                m = min(pref[p], low[H]); r = float(high[p] - m)
-                if r >= k * u and high[H] - m >= k * u and (best is None or r >= best[1] - 1e-15):
-                    best = (p, r)
-            if best is None:
+            R = W6.rs(); W6.update(t)
+            if R is None or R >= t or R - H > V.MAX_SIDE:
                 continue
-            R = best[0]
             if not (R + 1 <= t <= R + BREAK_LOOKAHEAD) or high[R:t + 1].max() > high[R]:
                 continue
-            if R not in ls_cache:
-                ok = [(q, d) for q, d in cands if V.SYM_LO <= (R - H) / (H - q) <= V.SYM_HI]
-                L = max(ok, key=lambda x: (x[1], x[0]))[0] if ok else None
-                if L is not None and not V.cobbled_ok(high, low, L, H, u, k):
-                    L = None
-                ls_cache[R] = L
-            L = ls_cache[R]
-            if L is None:
+            if not (V.SYM_LO <= (R - H) / (H - L) <= V.SYM_HI):
                 continue
             g = price_geometry(high, low, atrv, L, H, R)
             if g is None or not np.isfinite(atrv[t]):
@@ -182,7 +173,7 @@ def detect(df: pd.DataFrame, k: float = K_U, trace: dict | None = None) -> list[
             lt, y1, rt, y2, hgt = g
             if trace is not None and (H, R) not in trace:
                 trace[(H, R)] = dict(L=L, H=H, R=R, lt=lt, y1=y1, rt=rt, y2=y2, hgt=hgt, t0=t)
-            nk, _, _, _, brk, _, _ = levels_at(lt, y1, rt, y2, t, atrv[t])
+            nk, brk = S6.v6_break_level(lt, y1, rt, y2, t, atrv[t])
             stop = float(high[R] + STOP_ATR * atrv[t])
             t1, t2 = float(nk - hgt), float(nk - 1.5 * hgt)
             base = dict(L=L, H=H, R=R, lt=lt, y1=y1, rt=rt, y2=y2, hgt=hgt, neck=float(nk), t=t,
@@ -281,6 +272,8 @@ def make_row(symbol: str, tf: str, df: pd.DataFrame, ev: dict, df_up: pd.DataFra
         ) + " 未验证（1H/4H 回测为负），建议风险 0.5%，单独记账，不计入15m熔断。",
     }
     SC.attach_neck_slope(row, df)
+    S6.decorate(row, df, int(t), tf, SC.pivot_confirmation)  # 2026-11-14 v6 tier label + 比例分 + 确认 x/3
+    row["note"] = row["note"].replace("未验证（1H/4H 回测为负）", f"{row['tier_cn']}（1H/4H 回测为负）")
     SC.attach_shoulder_prop(row, df)
     return row
 

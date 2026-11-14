@@ -228,11 +228,11 @@ def test_run_once_posts_formal_then_watch(runner_env):
 def test_run_once_breaker_suppresses_watch(runner_env):
     tmp, posts = runner_env
     today = datetime.now(TZ).strftime("%Y-%m-%d")
-    j = pj.empty_journal()
+    j = pj.empty_journal(book=pj.BOOK_V6_15M)  # 2026-11-14: breaker lives on the v6 book
     for i in range(3):
         j["trades"].append({"id": f"x{i}", "pattern_id": f"x{i}", "symbol": "ZZZUSDT", "status": "closed",
                             "account_taken": True, "pnl_R": -1.0, "exit_time": f"{today} 0{i + 1}:00"})
-    (tmp / "paper_journal.json").write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
+    (tmp / "paper_v6_15m_journal.json").write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
     write_signals(tmp, [sig("W1USDT")])
     assert scan_runner.run_once() == 0
     assert all(p.get("kind") == "circuit_breaker" for p in posts)  # only the breaker notice
@@ -320,3 +320,24 @@ def test_15m_payload_and_dedup_retest():
     # pattern_id includes status so a later 可入场 on the same pivots is a new key
     assert "已破位·等回踩" in scan_runner.pattern_id(s)
     assert scan_runner.pattern_id(s) != scan_runner.pattern_id(sig("SOLUSDT", status="可入场"))
+
+
+def test_run_once_pushes_v6_tier_and_journals_it(runner_env):
+    """2026-11-14: 15m v6 rows go out as their own payload (tier v6, 0.5%) and into paper_v6_15m."""
+    tmp, posts = runner_env
+    r = sig("V6USDT", status="可入场")
+    r.update({"tier": "v6", "timeframe": "15m", "suggested_risk_pct": 0.5, "v6": True,
+              "tier_cn": "15m·v6 三栋认肩·未验证", "prop_score": 80, "confirm_n": 2,
+              "confirm_x3_text": "确认 2/3：RSI背离√ MACD柱背离√ 量能递减×"})
+    write_signals(tmp, [r])
+    assert scan_runner.run_once() == 0
+    assert [p["tier"] for p in posts] == ["v6"]
+    p = posts[0]
+    assert p["validated"] is False and p["suggested_risk_pct"] == 0.5 and p["tier_cn"] == "15m·v6 三栋认肩·未验证"
+    s = p["signals"][0]
+    assert s["signal_id"] == "binance|V6USDT|v6-15m|2026-11-11 07:15|可入场"
+    assert s["prop_score"] == 80 and s["confirm_n"] == 2 and s["tier"] == "v6"
+    vj = json.loads((tmp / "paper_v6_15m_journal.json").read_text(encoding="utf-8"))
+    assert len(vj["trades"]) == 1 and vj["trades"][0]["alerted"]
+    fj = tmp / "paper_journal.json"
+    assert not fj.exists() or not json.loads(fj.read_text(encoding="utf-8"))["trades"]

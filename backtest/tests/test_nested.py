@@ -51,28 +51,50 @@ def test_uni_inner_matches_annotation(uni):
     assert _t(uni, g["R"]) == "2026-11-10 00:00"      # 小右肩 (三栋: 11-10~11)
 
 
-def test_uni_outer_row_annotated_at_break(uni):
-    cut = uni.iloc[:494].reset_index(drop=True)          # last bar = 11-11 12:00 outer break
-    rows = scan_htf.live_rows("UNIUSDT", "4h", cut, None)
-    outer = [r for r in rows if r.get("nested_role") == "outer"]
-    assert outer and outer[0]["status"] == "可入场"
-    r = outer[0]
-    assert r["nested"] is True and r["child"]["L_time"] == "2026-11-06 20:00"
-    assert "右肩内又成一个小头肩" in r["nested_text"]
-    assert "R:R" in r["nested_text"]  # inner break exists but R:R<1.5 -> said explicitly
-    assert not any(x.get("nested_signal") for x in rows)
+def _uni_outer(uni):
+    _, outers = N.outer_patterns(uni)
+    o = [o for o in outers if _t(uni, o["H"]) == "2026-11-05 04:00" and _t(uni, o["R"]) == "2026-11-08 08:00"]
+    assert o
+    return o[0]
 
 
-def test_uni_outer_watch_annotated_early(uni):
-    rows = scan_htf.live_rows("UNIUSDT", "4h", uni.iloc[:487].reset_index(drop=True), None)
-    assert any(r.get("nested_role") == "outer" and r["status"] == "观望" for r in rows)
+def test_uni_v6_pivots_and_no_break_below_sloped_neck(uni):
+    """2026-11-14 三栋 v6: LS = deepest independent pullback on the rising leg (11-01 20:00),
+    RS = highest bar of the rebound segment (11-08 08:00). The v6 neckline joins the two
+    pullback lows (11-03 08:00 → 11-05 20:00, sloping down); UNI never CLOSED below it up to
+    11-12 08:00, so v6 emits no 可入场 / 已破位 for this head (the old horizontal-plateau
+    break at 11-11 12:00 no longer counts)."""
+    o = _uni_outer(uni)
+    assert _t(uni, o["L"]) == "2026-11-01 20:00"
+    assert _t(uni, o["lt"]) == "2026-11-03 08:00" and _t(uni, o["rt"]) == "2026-11-05 20:00"
+    evs = [e for e in scan_htf.detect(uni) if e["H"] == o["H"]]
+    assert not [e for e in evs if e["kind"] in ("entry", "retest")]
+    for cut in (494, 499):
+        rows = scan_htf.live_rows("UNIUSDT", "4h", uni.iloc[:cut].reset_index(drop=True), None)
+        assert not [r for r in rows if r.get("H_time") == "2026-11-05 04:00" and r["status"] in ("可入场", "已破位·等回踩")]
+
+
+def test_v6_htf_row_has_score_and_confirm(uni):
+    o = _uni_outer(uni)
+    n = len(uni); t = n - 1
+    ev = dict(o, kind="forming", t=t, neck=6.08, brk=6.04, stop=7.4, t1=4.9, t2=4.3, entry=6.04, rr=1.6)
+    r = scan_htf.make_row("UNIUSDT", "4h", uni, ev, None)
+    assert r["v6"] is True and r["tier_cn"] == "4H·v6 三栋认肩·未验证" and r["suggested_risk_pct"] == 0.5
+    assert isinstance(r["prop_score"], int) and 0 <= r["prop_score"] <= 100
+    assert r["confirm_x3_text"].startswith("确认 ") and r["confirm_total"] == 3
+    assert r["prop_text"].startswith("比例分 ")
 
 
 def test_nested_rows_not_serialized_private(uni, tmp_path):
-    rows = scan_htf.live_rows("UNIUSDT", "4h", uni.iloc[:494].reset_index(drop=True), None)
-    r = dict(rows[0], exchange="binance", exchange_cn="币安")
+    o = _uni_outer(uni)
+    _, structs = N.nested_scan(uni, [o])
+    g = structs[(o["H"], o["R"])][-1][1]
+    n = len(uni)
+    ev = dict(o, kind="forming", t=n - 1, neck=6.08, brk=6.04, stop=7.4, t1=4.9, t2=4.3, entry=6.04, rr=1.6)
+    r = dict(scan_htf.make_row("UNIUSDT", "4h", uni, ev, None), exchange="binance", exchange_cn="币安",
+             nested_role="outer", _nested_other=g)
     p = tmp_path / "c.png"
-    SC.plot_setup(uni.iloc[:494].reset_index(drop=True), r, p, tf_label="4H")
+    SC.plot_setup(uni, r, p, tf_label="4H")
     assert p.exists() and p.stat().st_size > 10000
     assert "_nested_other" in r
 

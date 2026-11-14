@@ -71,6 +71,7 @@ RR_MIN = 1.5
 ENTRY_FRESH_BARS = 24
 KLINE_LIMIT_15M = 800
 KLINE_LIMIT_1H = 300
+V6_15M = True  # 2026-11-14 三栋: 15m uses ONLY the v6 三栋认肩 rule (scan_v6.py); old formal/observe stopped
 NESTED_15M = True  # 2026-11-12: also look for nested (inner) H&S inside every right shoulder
 
 FONT = None
@@ -426,10 +427,15 @@ def attach_shoulder_prop(row: dict, df15: pd.DataFrame | None = None,
         row["prop_rs_height"] = rs_h
         row["prop_class_cn"] = cls
         row["prop_text"] = prop_info_text(ls_t, rs_t, ls_h, rs_h, cls)
-        note = v6_pivot_note(row, df15, high, low)
-        row["prop_v6_note"] = note
-        if note:
-            row["prop_text"] = row["prop_text"] + "；" + note
+        if row.get("v6") and row.get("prop_score_text"):
+            # v6 rows: the v6 proportion score (leg-to-leg, at the break) + confirmation x/3
+            row["prop_text"] = f"{row['prop_score_text']}；{row.get('confirm_x3_text') or ''}".rstrip("；")
+            row["prop_v6_note"] = None
+        else:
+            note = v6_pivot_note(row, df15, high, low)
+            row["prop_v6_note"] = note
+            if note:
+                row["prop_text"] = row["prop_text"] + "；" + note
     except Exception:
         row.update(empty)
     attach_chart_refs(row, df15, high=high, low=low)
@@ -707,7 +713,8 @@ def collect_lowrr_breakouts(recs) -> list:
 
 def live_retest(symbol, df15, df1, sigs, now: pd.Timestamp,
                 extras: list[dict] | None = None, *,
-                tier: str = TIER_FORMAL, suggested_risk_pct: float = FORMAL_RISK_PCT) -> list[dict]:
+                tier: str = TIER_FORMAL, suggested_risk_pct: float = FORMAL_RISK_PCT,
+                break_levels: list[float] | None = None) -> list[dict]:
     """Post-break row when close/next-open R:R < 1.5 but R:R at the break level is still >= 1.5.
 
     Limit entry = break level. Same freshness window and stop/T1 invalidation as live_entries.
@@ -728,7 +735,7 @@ def live_retest(symbol, df15, df1, sigs, now: pd.Timestamp,
         age_bars = (last_ts - et) / BAR_15
         if age_bars > ENTRY_FRESH_BARS:
             continue
-        brk = _break_level_of(sig, df15)
+        brk = break_levels[k] if break_levels is not None else _break_level_of(sig, df15)
         if brk is None:
             continue
         stop, t1, t2 = float(sig.stop), float(sig.target), float(sig.target15)
@@ -1500,11 +1507,76 @@ def clear_old_charts():
         p.unlink(missing_ok=True)
 
 
+def live_v6(symbol: str, df15: pd.DataFrame, df1: pd.DataFrame, now: pd.Timestamp,
+            events: list[dict] | None = None) -> list[dict]:
+    """2026-11-14 三栋: 15m v6 rows (可入场 / 已破位·等回踩) after a close below the v6 neckline.
+    Same live gates as the old rule (fresh <= 24 bars, price between stop and TP1, R:R >= 1.5,
+    1H veto now). Tier 'v6', 0.5% risk, own paper book; unvalidated."""
+    import scan_v6 as S6
+    if events is None:
+        events = S6.detect_15m(symbol, df15, df1)
+    rows: list[dict] = []
+    for ev in events:
+        sig = ev["sig"]
+        if ev["kind"] == "entry":
+            got = live_entries(symbol, df15, df1, [sig], now)
+        else:
+            got = live_retest(symbol, df15, df1, [sig], now, tier=S6.TIER_V6,
+                              suggested_risk_pct=S6.V6_RISK_PCT, break_levels=[float(ev["brk"])])
+        for r in got:
+            et = pd.Timestamp(r["official_entry_time"]).tz_localize("Asia/Shanghai")
+            valid_until = et + ENTRY_FRESH_BARS * BAR_15
+            lev = None
+            ref = float(r.get("suggest_entry") or r.get("official_entry") or 0)
+            if ref and r["stop"] > ref:
+                d = (r["stop"] - ref) / ref
+                lev = max(1, min(50, int(math.floor(1.0 / (2.0 * d + 0.005)))))
+            r.update({
+                "tier": S6.TIER_V6, "suggested_risk_pct": S6.V6_RISK_PCT, "timeframe": "15m",
+                "neck": float(ev["neck"]), "break_level": float(ev["brk"]),
+                "break_bar_shanghai": to_shanghai(df15["dt"].iloc[int(ev["t"])]),
+                "valid_until_shanghai": r.get("valid_until_shanghai") or to_shanghai(valid_until.tz_convert("UTC")),
+                "leverage_cap": lev, "leverage_note": (f"杠杆≤{lev}x（强平距离≥2×止损距离）" if lev else None),
+                "exits": "TP1=1.0H 平60%后止损移到保本；TP2=1.5H 平余仓",
+            })
+            S6.decorate(r, df15, int(ev["t"]), "15m", pivot_confirmation)
+            head = ("15m 已收盘跌破 v6 颈线（三栋认肩），" if r["status"] == "可入场" else "")
+            r["note"] = head + (r.get("note") or "") + " 15m·v6 三栋认肩·未验证，建议风险 0.5%，单独记账（paper_v6_15m）。"
+            attach_shoulder_prop(r, df15)
+            r["_ev_t"] = int(ev["t"])
+            rows.append(r)
+    entry_heads = {r["H"] for r in rows if r["status"] == "可入场"}
+    return [r for r in rows if r["status"] == "可入场" or r["H"] not in entry_heads]
+
+
 def scan_symbol(exchange: str, sym: str, df15: pd.DataFrame, df1: pd.DataFrame,
                 now: pd.Timestamp) -> tuple[list[dict], pd.DataFrame | None]:
-    """Same A+C rule + 观望 + 观察 for one symbol on one exchange. Rule logic unchanged."""
+    """15m scan for one symbol on one exchange. Since 2026-11-14 (V6_15M) only the v6 三栋认肩
+    rule produces rows; the old A+C formal / 观望 / 观察 tiers are no longer generated."""
     df15i = add_indicators(df15)
     df1i = add_indicators(df1)
+    if V6_15M:
+        try:
+            rows = live_v6(sym, df15i, df1i, now)
+        except Exception as e:  # noqa: BLE001
+            print(f"  FAIL {exchange}:{sym} v6: {type(e).__name__} {e}", flush=True)
+            rows = []
+        print(f"  {exchange[:3]} {sym:18s} v6 entry={sum(r['status'] == '可入场' for r in rows)} "
+              f"retest={sum(r['status'] == STATUS_RETEST for r in rows)}", flush=True)
+        if NESTED_15M:
+            try:
+                import nested_hs
+                nest = nested_hs.scan_15m_nested(sym, df15i, df1i, rows)
+                if nest:
+                    print(f"  {exchange[:3]} {sym:18s} nested={len(nest)}", flush=True)
+                rows = rows + nest
+            except Exception as e:  # noqa: BLE001
+                print(f"  FAIL {exchange}:{sym} nested: {type(e).__name__} {e}", flush=True)
+        for r in rows:
+            r["exchange"] = exchange
+            r["exchange_cn"] = EXCHANGE_CN[exchange]
+            r["coin"] = okx_market.coin_key(sym, exchange)
+        return rows, df15i
     recs = scan_line(sym, df15i, BAR_15, df1i, BAR_1H)
     sigs = collect_ac_signals(sym, df15i, df1i, recs=recs)
     ents = live_entries(sym, df15i, df1i, sigs, now)
@@ -1560,11 +1632,11 @@ def run_exchange(exchange: str, symbols: list[str], fetch, now: pd.Timestamp, ro
             n_ok += 1
             for r in found:
                 chart = chart_path(r)
-                plot_setup(df15i, r, chart)
+                plot_setup(df15i, r, chart, title_extra=(r.get("tier_cn") or "") if r.get("v6") else "")
                 r["chart"] = str(chart)
                 r["data_source"] = binance_data.source_of(sym, exchange)
                 try:
-                    r["chart_spec"] = chart_spec(df15i, r, "15m")
+                    r["chart_spec"] = chart_spec(df15i, r, "15m", title_extra=(r.get("tier_cn") or "") if r.get("v6") else "")
                 except Exception as e:  # noqa: BLE001  (chart spec is optional)
                     print(f"  chart_spec {exchange}:{sym}: {type(e).__name__} {e}", flush=True)
                 rows.append(r)
