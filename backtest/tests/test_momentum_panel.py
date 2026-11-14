@@ -271,7 +271,9 @@ def test_shoulder_prop_metrics_formula():
     m = scan_15m.shoulder_prop_metrics(high, low, 4, 12, 20, 8, 16, 100.0, 100.0)
     assert m["prop_ls_time"] == pytest.approx(8 / 8)   # 8-0 over 16-8
     assert m["prop_rs_time"] == pytest.approx(8 / 8)   # 24-16 over 16-8
-    assert m["prop_ls_height"] == pytest.approx(10 / 20)
+    # v6 amplitude: LS (110-99 + 110-100)/2 = 10.5; head (120-100 + 120-100)/2 = 20;
+    # RS (110-100 + 110-100)/2 = 10
+    assert m["prop_ls_height"] == pytest.approx(10.5 / 20)
     assert m["prop_rs_height"] == pytest.approx(10 / 20)
     row = {"L": 4, "H": 12, "R": 20, "lt": 8, "rt": 16, "y1": 100.0, "y2": 100.0,
            "stop": 121.0, "target_1h": 90.0, "status": "可入场"}

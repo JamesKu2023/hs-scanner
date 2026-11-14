@@ -217,9 +217,21 @@ def _finite_float(x):
     return v if np.isfinite(v) else None
 
 
-def _prop_pre_trough(low, L, H) -> int:
-    a0 = max(0, int(L) - (int(H) - int(L)))
-    return a0 + int(np.argmin(low[a0:int(L) + 1]))
+def _prop_pre_trough(low, L, H, high=None) -> int:
+    """LS rally origin. 2026-11-14 (三栋 LINK 批注, v6 量法): walk left from LS tracking the
+    lowest low and stop at the first counter-rally larger than half of the LS rally; window
+    is at most H-L bars before LS. Without highs, falls back to the window's lowest low."""
+    L, H = int(L), int(H)
+    a0 = max(0, L - (H - L))
+    if high is None:
+        return a0 + int(np.argmin(low[a0:L + 1]))
+    m, mp = float(low[L]), L
+    for i in range(L - 1, a0 - 1, -1):
+        if float(low[i]) < m:
+            m, mp = float(low[i]), i
+        elif float(high[i]) - m >= 0.5 * (float(high[L]) - m):
+            break
+    return mp
 
 
 def _prop_post_trough(low, lt, y1, rt, y2, R, H, L) -> int:
@@ -248,8 +260,12 @@ def shoulder_prop_metrics(high, low, L, H, R, lt, rt, y1, y2) -> dict:
         n = min(len(high), len(low))
         if not (0 <= min(L, H, R, lt, rt) and max(L, H, R, lt, rt) < n):
             return out
+        # 2026-11-14 (三栋 LINK 批注, v6 量法, display only): each wave is measured leg to leg.
+        # span: LS = rally origin p0 -> left trough lt; head = lt -> rt; RS = rt -> the fall
+        # back to the neckline p3. Height = wave amplitude (rise+fall)/2, not height above
+        # the neckline (which made shoulders look tiny when the neck sits near shoulder level).
         span_h = max(1, rt - lt)
-        p0 = _prop_pre_trough(low, L, H)
+        p0 = _prop_pre_trough(low, L, H, high)
         p3 = _prop_post_trough(low, lt, y1, rt, y2, R, H, L)
         span_l = max(1, lt - p0)
         span_r = max(1, p3 - rt)
@@ -258,17 +274,16 @@ def shoulder_prop_metrics(high, low, L, H, R, lt, rt, y1, y2) -> dict:
             out["prop_ls_time"] = sl
         if np.isfinite(sr):
             out["prop_rs_time"] = sr
-        nk_l = float(neck_at(lt, y1, rt, y2, L))
-        nk_h = float(neck_at(lt, y1, rt, y2, H))
-        nk_r = float(neck_at(lt, y1, rt, y2, R))
-        h_h = float(high[H]) - nk_h
-        if np.isfinite(h_h) and h_h > 0:
-            h_l = float(high[L]) - nk_l
-            h_r = float(high[R]) - nk_r
-            if np.isfinite(h_l) and h_l > 0:
-                out["prop_ls_height"] = float(h_l / h_h)
-            if np.isfinite(h_r) and h_r > 0:
-                out["prop_rs_height"] = float(h_r / h_h)
+        p3c = min(int(p3), n - 1)
+        r_end = float(np.min(low[R:p3c + 1])) if p3c > R else float(low[rt])
+        a_h = (2 * float(high[H]) - float(low[lt]) - float(low[rt])) / 2
+        if np.isfinite(a_h) and a_h > 0:
+            a_l = (2 * float(high[L]) - float(low[p0]) - float(low[lt])) / 2
+            a_r = (2 * float(high[R]) - float(low[rt]) - r_end) / 2
+            if np.isfinite(a_l) and a_l > 0:
+                out["prop_ls_height"] = float(a_l / a_h)
+            if np.isfinite(a_r) and a_r > 0:
+                out["prop_rs_height"] = float(a_r / a_h)
     except Exception:
         pass
     return out
@@ -332,6 +347,58 @@ def measured_any(*vals) -> bool:
     return any(_finite_float(v) is not None for v in vals)
 
 
+def v6_pivot_note(row: dict, df15, high, low) -> str | None:
+    """Display only (2026-11-14, 三栋 LINK 批注): where the research v6 picker
+    (research/hs_v6_core.py) would put LS/RS for this head. Never changes the signal,
+    entry, stop or targets. Returns None if v6 agrees or cannot be computed."""
+    try:
+        if df15 is None or "atr" not in df15.columns:
+            return None
+        rp = str(ROOT / "research")
+        if rp not in sys.path:
+            sys.path.append(rp)
+        import hs_shoulder_v3_core as _V
+        import hs_v6_core as _C6
+        H, L0, R0 = int(row["H"]), int(row["L"]), int(row["R"])
+        n = min(len(high), len(low))
+        t = n - 1
+        et = row.get("official_entry_time")
+        if et:
+            ts = pd.Timestamp(et)
+            ts = ts.tz_localize("Asia/Shanghai") if ts.tzinfo is None else ts
+            i0 = int(df15["dt"].searchsorted(ts.tz_convert("UTC"), side="left"))
+            if 0 < i0 <= n:
+                t = i0 - 1
+        u = float(_V.unit_series(df15["atr"].to_numpy(dtype=float))[H])
+        if not (np.isfinite(u) and u > 0):
+            return None
+        hi = np.asarray(high, dtype=float); lo = np.asarray(low, dtype=float)
+        sw = _V.swing_highs(hi)
+        nge = np.full(len(hi), len(hi) - 1, dtype=int); st = []
+        for i in range(len(hi)):
+            while st and hi[i] > hi[st[-1]]:
+                nge[st.pop()] = i
+            st.append(i)
+        P = _C6.pick_ls(hi, lo, sw, nge, H, u)
+        W = _C6.RightWalker(hi, lo, H, u)
+        for j in range(H + 1, t):
+            if hi[j] > hi[H]:
+                break
+            W.update(j)
+        R6 = W.rs()
+        tt = df15["dt"]
+        parts = []
+        if P is not None and P["L"] != L0:
+            parts.append(f"左肩 {to_shanghai(tt.iloc[P['L']])[5:]} {fmt_px(hi[P['L']])}")
+        if R6 is not None and R6 != R0 and R6 < t:
+            parts.append(f"右肩 {to_shanghai(tt.iloc[R6])[5:]} {fmt_px(hi[R6])}")
+        if not parts:
+            return None
+        return "v6认肩参考：" + "、".join(parts) + "（与规则选点不同，只作参考，入场止损按规则）"
+    except Exception:
+        return None
+
+
 def attach_shoulder_prop(row: dict, df15: pd.DataFrame | None = None,
                          high=None, low=None) -> dict:
     """Fill prop_* fields on the row. Never changes prices, stops, or targets."""
@@ -359,6 +426,10 @@ def attach_shoulder_prop(row: dict, df15: pd.DataFrame | None = None,
         row["prop_rs_height"] = rs_h
         row["prop_class_cn"] = cls
         row["prop_text"] = prop_info_text(ls_t, rs_t, ls_h, rs_h, cls)
+        note = v6_pivot_note(row, df15, high, low)
+        row["prop_v6_note"] = note
+        if note:
+            row["prop_text"] = row["prop_text"] + "；" + note
     except Exception:
         row.update(empty)
     attach_chart_refs(row, df15, high=high, low=low)
