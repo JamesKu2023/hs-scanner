@@ -1333,7 +1333,7 @@ def journal_log_line(journal: dict) -> str:
     b = journal.get("breaker") or {}
     equity = float(journal.get("equity") or EQUITY_START)
     flag = "tripped" if b.get("tripped") else "ok"
-    if journal.get("book") != BOOK_FORMAL and journal.get("book"):
+    if journal.get("book") not in BREAKER_BOOKS:
         flag = "n/a"
     return (
         f"journal[{journal.get('book') or BOOK_FORMAL}] equity={equity:.4f} open={n_open} pending={n_pend} "

@@ -357,6 +357,11 @@ def live_nested(symbol: str, tf: str, df, df_up, rows: list[dict], events: list[
         elif not (e["kind"] == "forming" and e["t"] == last):
             continue
         row = HT.make_row(symbol, tf, df, e, df_up, cfg=cfg)
+        # 2026-11-14: inner pivots still use the nested picker (not v6); keep 比例分/确认 as info
+        # but do not label the inner row as a v6 tier.
+        row["v6"] = False
+        row["tier_cn"] = f"{tf}·嵌套小头肩·未验证" if tf == "15m" else f"{tf.upper()}·嵌套小头肩·未验证"
+        row["note"] = (row.get("note") or "").replace(HT.S6.V6_TIER_CN.get(tf, "@@"), "嵌套小头肩·未验证")
         decorate_inner(row, df, e, tf)
         out.append(row); done.add(key)
     heads_entry = {r["H"] for r in out if r["status"] == HT.STATUS_ENTRY}
