@@ -213,6 +213,13 @@
       "exchange": "okx",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "v6|15m|PAXGUSDT|已破位·等回踩|2026-11-16 22:45": {
+      "first_pushed": "2026-11-17 10:41:54",
+      "symbol": "PAXGUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "v6"
     }
   }
 }
