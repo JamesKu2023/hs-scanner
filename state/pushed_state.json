@@ -220,6 +220,20 @@
       "exchange": "binance",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "v6|15m|PAXGUSDT|已破位·等回踩|2026-11-17 13:30": {
+      "first_pushed": "2026-11-17 19:16:03",
+      "symbol": "PAXGUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "v6"
+    },
+    "v6|15m|SPACE-USDT-SWAP|已破位·等回踩|2026-11-17 06:45": {
+      "first_pushed": "2026-11-17 19:16:03",
+      "symbol": "SPACE-USDT-SWAP",
+      "exchange": "okx",
+      "status": "已破位·等回踩",
+      "tier": "v6"
     }
   }
 }
