@@ -234,6 +234,14 @@
       "exchange": "okx",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "4h|ICPUSDT|可入场|2026-11-17 04:00": {
+      "first_pushed": "2026-11-19 03:11:11",
+      "symbol": "ICPUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "4h"
     }
   }
 }
