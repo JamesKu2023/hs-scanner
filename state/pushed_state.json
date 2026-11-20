@@ -242,6 +242,14 @@
       "status": "可入场",
       "tier": "htf",
       "timeframe": "4h"
+    },
+    "4h|INJUSDT|已破位·等回踩|2026-11-17 20:00": {
+      "first_pushed": "2026-11-20 15:51:47",
+      "symbol": "INJUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "htf",
+      "timeframe": "4h"
     }
   }
 }
