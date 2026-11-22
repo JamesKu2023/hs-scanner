@@ -301,6 +301,27 @@
       "status": "已破位·等回踩",
       "tier": "nested",
       "timeframe": "1h"
+    },
+    "v6|15m|AVAXUSDT|可入场|2026-11-22 20:15": {
+      "first_pushed": "2026-11-23 05:00:38",
+      "symbol": "AVAXUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "v6"
+    },
+    "v6|15m|SUI-USDT-SWAP|已破位·等回踩|2026-11-22 20:15": {
+      "first_pushed": "2026-11-23 05:00:38",
+      "symbol": "SUI-USDT-SWAP",
+      "exchange": "okx",
+      "status": "已破位·等回踩",
+      "tier": "v6"
+    },
+    "v6|15m|BNB-USDT-SWAP|已破位·等回踩|2026-11-23 00:30": {
+      "first_pushed": "2026-11-23 05:00:38",
+      "symbol": "BNB-USDT-SWAP",
+      "exchange": "okx",
+      "status": "已破位·等回踩",
+      "tier": "v6"
     }
   }
 }
