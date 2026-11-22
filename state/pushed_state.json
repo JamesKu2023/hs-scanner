@@ -285,6 +285,22 @@
       "exchange": "okx",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "nested|1h|HUMAUSDT|已破位·等回踩|2026-11-21 22:00": {
+      "first_pushed": "2026-11-22 14:30:40",
+      "symbol": "HUMAUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "nested",
+      "timeframe": "1h"
+    },
+    "nested|1h|HUMAUSDT|已破位·等回踩|2026-11-21 23:00": {
+      "first_pushed": "2026-11-22 14:30:40",
+      "symbol": "HUMAUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "nested",
+      "timeframe": "1h"
     }
   }
 }
