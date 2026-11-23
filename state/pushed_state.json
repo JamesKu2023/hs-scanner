@@ -322,6 +322,20 @@
       "exchange": "okx",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "v6|15m|SUIUSDT|已破位·等回踩|2026-11-22 20:15": {
+      "first_pushed": "2026-11-23 09:34:06",
+      "symbol": "SUIUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "v6"
+    },
+    "v6|15m|AVAXUSDT|已破位·等回踩|2026-11-23 00:15": {
+      "first_pushed": "2026-11-23 09:34:06",
+      "symbol": "AVAXUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "v6"
     }
   }
 }
