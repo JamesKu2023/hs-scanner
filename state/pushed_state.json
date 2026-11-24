@@ -384,6 +384,53 @@
       "status": "可入场",
       "tier": "htf",
       "timeframe": "1h"
+    },
+    "v6|15m|ICPUSDT|已破位·等回踩|2026-11-24 14:00": {
+      "first_pushed": "2026-11-25 00:31:18",
+      "symbol": "ICPUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "v6"
+    },
+    "1h|BNBUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-25 00:32:38",
+      "symbol": "BNBUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|HYPEUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-25 00:32:38",
+      "symbol": "HYPEUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|ENAUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-25 00:32:38",
+      "symbol": "ENAUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|HYPE-USDT-SWAP|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-25 00:32:38",
+      "symbol": "HYPE-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|ENA-USDT-SWAP|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-25 00:32:38",
+      "symbol": "ENA-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
     }
   }
 }
