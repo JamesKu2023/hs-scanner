@@ -336,6 +336,54 @@
       "exchange": "binance",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "1h|NEARUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "NEARUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|SUIUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "SUIUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|ADAUSDT|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "ADAUSDT",
+      "exchange": "binance",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|NEAR-USDT-SWAP|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "NEAR-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|SUI-USDT-SWAP|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "SUI-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
+    },
+    "1h|ADA-USDT-SWAP|可入场|2026-11-23 22:00": {
+      "first_pushed": "2026-11-24 13:38:28",
+      "symbol": "ADA-USDT-SWAP",
+      "exchange": "okx",
+      "status": "可入场",
+      "tier": "htf",
+      "timeframe": "1h"
     }
   }
 }
