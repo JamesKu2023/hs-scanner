@@ -1,25 +1,5 @@
 {
   "pushed": {
-    "1000PEPEUSDT|观望|2026-11-11 08:30|2026-11-11 09:45|2026-11-11 12:30": {
-      "first_pushed": "2026-11-11 15:10:51",
-      "symbol": "1000PEPEUSDT",
-      "status": "观望",
-      "tier": "formal"
-    },
-    "AAVEUSDT|观望|2026-11-11 02:30|2026-11-11 11:15|2026-11-11 19:45": {
-      "first_pushed": "2026-11-11 22:24:40",
-      "symbol": "AAVEUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "formal"
-    },
-    "LINK-USDT-SWAP|观望|2026-11-11 06:00|2026-11-11 09:30|2026-11-11 22:00": {
-      "first_pushed": "2026-11-11 23:35:26",
-      "symbol": "LINK-USDT-SWAP",
-      "exchange": "okx",
-      "status": "观望",
-      "tier": "formal"
-    },
     "ARIAUSDT|观望|2026-11-11 14:15|2026-11-11 18:15|2026-11-12 06:00": {
       "first_pushed": "2026-11-12 09:03:05",
       "symbol": "ARIAUSDT",
@@ -431,6 +411,13 @@
       "status": "可入场",
       "tier": "htf",
       "timeframe": "1h"
+    },
+    "v6|15m|OPG-USDT-SWAP|已破位·等回踩|2026-11-25 14:00": {
+      "first_pushed": "2026-11-26 03:38:42",
+      "symbol": "OPG-USDT-SWAP",
+      "exchange": "okx",
+      "status": "已破位·等回踩",
+      "tier": "v6"
     }
   }
 }
