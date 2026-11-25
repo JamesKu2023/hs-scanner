@@ -1,6 +1,6 @@
 {
-  "asof_utc": "2026-11-17T19:55:26Z",
-  "asof_shanghai": "2026-11-18 03:55",
+  "asof_utc": "2026-11-25T01:02:30Z",
+  "asof_shanghai": "2026-11-25 09:02",
   "rules": {
     "market": "Binance USDT-M perpetual (ranked by SPOT 24h quote volume; fapi unreachable)",
     "top_n_by_24h_quote_volume": 30,
@@ -11,210 +11,210 @@
     {
       "symbol": "BTCUSDT",
       "base_asset": "BTC",
-      "quote_volume_24h_spot": 1772101030.4394014,
+      "quote_volume_24h_spot": 1177267946.448393,
       "rank": 1,
       "slippage_bps": 2
     },
     {
       "symbol": "ETHUSDT",
       "base_asset": "ETH",
-      "quote_volume_24h_spot": 612185986.352819,
+      "quote_volume_24h_spot": 493188403.249839,
       "rank": 2,
       "slippage_bps": 2
     },
     {
       "symbol": "SOLUSDT",
       "base_asset": "SOL",
-      "quote_volume_24h_spot": 224802942.41579,
+      "quote_volume_24h_spot": 171344409.37328,
       "rank": 3,
       "slippage_bps": 5
     },
     {
       "symbol": "ZECUSDT",
       "base_asset": "ZEC",
-      "quote_volume_24h_spot": 162574688.12376,
+      "quote_volume_24h_spot": 126739575.78911,
       "rank": 4,
       "slippage_bps": 5
     },
     {
       "symbol": "XRPUSDT",
       "base_asset": "XRP",
-      "quote_volume_24h_spot": 91063251.46485,
+      "quote_volume_24h_spot": 101731905.65564,
       "rank": 5,
       "slippage_bps": 5
     },
     {
       "symbol": "NEARUSDT",
       "base_asset": "NEAR",
-      "quote_volume_24h_spot": 71585927.4418,
+      "quote_volume_24h_spot": 72715345.579,
       "rank": 6,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "BNBUSDT",
-      "base_asset": "BNB",
-      "quote_volume_24h_spot": 66310312.11441,
-      "rank": 7,
       "slippage_bps": 5
     },
     {
       "symbol": "HYPEUSDT",
       "base_asset": "HYPE",
-      "quote_volume_24h_spot": 51440807.86226,
+      "quote_volume_24h_spot": 53339446.24021,
+      "rank": 7,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "BNBUSDT",
+      "base_asset": "BNB",
+      "quote_volume_24h_spot": 49342845.89369,
       "rank": 8,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "ASTERUSDT",
-      "base_asset": "ASTER",
-      "quote_volume_24h_spot": 39063620.322659,
-      "rank": 9,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "UNIUSDT",
-      "base_asset": "UNI",
-      "quote_volume_24h_spot": 33294530.41808,
-      "rank": 10,
       "slippage_bps": 5
     },
     {
       "symbol": "1000PEPEUSDT",
       "base_asset": "PEPE",
-      "quote_volume_24h_spot": 26467058.0139815,
-      "rank": 11,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "ENAUSDT",
-      "base_asset": "ENA",
-      "quote_volume_24h_spot": 23341599.458803,
-      "rank": 12,
+      "quote_volume_24h_spot": 34139077.56107245,
+      "rank": 9,
       "slippage_bps": 5
     },
     {
       "symbol": "DOGEUSDT",
       "base_asset": "DOGE",
-      "quote_volume_24h_spot": 22803040.68005,
-      "rank": 13,
+      "quote_volume_24h_spot": 24823011.7741,
+      "rank": 10,
       "slippage_bps": 5
     },
     {
       "symbol": "TRXUSDT",
       "base_asset": "TRX",
-      "quote_volume_24h_spot": 20728295.89661,
+      "quote_volume_24h_spot": 22041803.86464,
+      "rank": 11,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "UNIUSDT",
+      "base_asset": "UNI",
+      "quote_volume_24h_spot": 20925233.84022,
+      "rank": 12,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "MMTUSDT",
+      "base_asset": "MMT",
+      "quote_volume_24h_spot": 20227077.85288,
+      "rank": 13,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "ENAUSDT",
+      "base_asset": "ENA",
+      "quote_volume_24h_spot": 17726422.937141,
       "rank": 14,
       "slippage_bps": 5
     },
     {
-      "symbol": "BREVUSDT",
-      "base_asset": "BREV",
-      "quote_volume_24h_spot": 18677706.20384,
+      "symbol": "LINKUSDT",
+      "base_asset": "LINK",
+      "quote_volume_24h_spot": 17607230.07422,
       "rank": 15,
       "slippage_bps": 5
     },
     {
       "symbol": "SUIUSDT",
       "base_asset": "SUI",
-      "quote_volume_24h_spot": 18647360.52215,
+      "quote_volume_24h_spot": 17162117.55308,
       "rank": 16,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "INJUSDT",
-      "base_asset": "INJ",
-      "quote_volume_24h_spot": 15801210.6851,
-      "rank": 17,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "AAVEUSDT",
-      "base_asset": "AAVE",
-      "quote_volume_24h_spot": 15043872.67818,
-      "rank": 18,
       "slippage_bps": 5
     },
     {
       "symbol": "ADAUSDT",
       "base_asset": "ADA",
-      "quote_volume_24h_spot": 14984626.33879,
-      "rank": 19,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "AVAXUSDT",
-      "base_asset": "AVAX",
-      "quote_volume_24h_spot": 13533691.23626,
-      "rank": 20,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "LINKUSDT",
-      "base_asset": "LINK",
-      "quote_volume_24h_spot": 13341562.51419,
-      "rank": 21,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "HUMAUSDT",
-      "base_asset": "HUMA",
-      "quote_volume_24h_spot": 12975261.0604,
-      "rank": 22,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "MMTUSDT",
-      "base_asset": "MMT",
-      "quote_volume_24h_spot": 12427742.83476,
-      "rank": 23,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "PUMPUSDT",
-      "base_asset": "PUMP",
-      "quote_volume_24h_spot": 11717310.35856,
-      "rank": 24,
-      "slippage_bps": 5
-    },
-    {
-      "symbol": "GRAMUSDT",
-      "base_asset": "GRAM",
-      "quote_volume_24h_spot": 11406537.82658,
-      "rank": 25,
+      "quote_volume_24h_spot": 15812569.86456,
+      "rank": 17,
       "slippage_bps": 5
     },
     {
       "symbol": "LTCUSDT",
       "base_asset": "LTC",
-      "quote_volume_24h_spot": 10628791.08343,
-      "rank": 26,
+      "quote_volume_24h_spot": 14142159.49404,
+      "rank": 18,
       "slippage_bps": 5
     },
     {
       "symbol": "XAUTUSDT",
       "base_asset": "XAUT",
-      "quote_volume_24h_spot": 9904988.803613,
-      "rank": 27,
+      "quote_volume_24h_spot": 13980530.03203,
+      "rank": 19,
       "slippage_bps": 5
     },
     {
-      "symbol": "ICPUSDT",
-      "base_asset": "ICP",
-      "quote_volume_24h_spot": 8890882.89922,
-      "rank": 28,
+      "symbol": "WLDUSDT",
+      "base_asset": "WLD",
+      "quote_volume_24h_spot": 13811189.27138,
+      "rank": 20,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "LISTAUSDT",
+      "base_asset": "LISTA",
+      "quote_volume_24h_spot": 13403412.87149,
+      "rank": 21,
       "slippage_bps": 5
     },
     {
       "symbol": "TAOUSDT",
       "base_asset": "TAO",
-      "quote_volume_24h_spot": 8587152.48945,
+      "quote_volume_24h_spot": 13394701.33418,
+      "rank": 22,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "base_asset": "AVAX",
+      "quote_volume_24h_spot": 11637496.77371,
+      "rank": 23,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "SAHARAUSDT",
+      "base_asset": "SAHARA",
+      "quote_volume_24h_spot": 11548644.89103,
+      "rank": 24,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "PAXGUSDT",
+      "base_asset": "PAXG",
+      "quote_volume_24h_spot": 10783538.625128,
+      "rank": 25,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "INJUSDT",
+      "base_asset": "INJ",
+      "quote_volume_24h_spot": 9881744.17437,
+      "rank": 26,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "AAVEUSDT",
+      "base_asset": "AAVE",
+      "quote_volume_24h_spot": 9049633.56645,
+      "rank": 27,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "ZROUSDT",
+      "base_asset": "ZRO",
+      "quote_volume_24h_spot": 8919179.00136,
+      "rank": 28,
+      "slippage_bps": 5
+    },
+    {
+      "symbol": "FETUSDT",
+      "base_asset": "FET",
+      "quote_volume_24h_spot": 8734852.17124,
       "rank": 29,
       "slippage_bps": 5
     },
     {
-      "symbol": "1000LUNCUSDT",
-      "base_asset": "LUNC",
-      "quote_volume_24h_spot": 8493814.17395405,
+      "symbol": "WLFIUSDT",
+      "base_asset": "WLFI",
+      "quote_volume_24h_spot": 8536805.90545,
       "rank": 30,
       "slippage_bps": 5
     }
