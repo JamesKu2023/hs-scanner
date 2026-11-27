@@ -1,135 +1,5 @@
 {
   "pushed": {
-    "ARIAUSDT|观望|2026-11-11 14:15|2026-11-11 18:15|2026-11-12 06:00": {
-      "first_pushed": "2026-11-12 09:03:05",
-      "symbol": "ARIAUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "formal"
-    },
-    "ARIAUSDT|观望|2026-11-12 00:15|2026-11-12 01:30|2026-11-12 06:00": {
-      "first_pushed": "2026-11-12 09:03:05",
-      "symbol": "ARIAUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "formal"
-    },
-    "XRPUSDT|观察|2026-11-11 18:30|2026-11-12 01:15|2026-11-12 05:15": {
-      "first_pushed": "2026-11-12 09:03:05",
-      "symbol": "XRPUSDT",
-      "exchange": "binance",
-      "status": "观察",
-      "tier": "watch"
-    },
-    "JCTUSDT|观察|2026-11-11 10:00|2026-11-11 14:30|2026-11-12 00:45": {
-      "first_pushed": "2026-11-12 09:03:05",
-      "symbol": "JCTUSDT",
-      "exchange": "binance",
-      "status": "观察",
-      "tier": "watch"
-    },
-    "XRP-USDT-SWAP|观察|2026-11-11 18:30|2026-11-12 01:15|2026-11-12 05:15": {
-      "first_pushed": "2026-11-12 09:03:05",
-      "symbol": "XRP-USDT-SWAP",
-      "exchange": "okx",
-      "status": "观察",
-      "tier": "watch"
-    },
-    "ARIAUSDT|观察|2026-11-11 14:15|2026-11-11 18:15|2026-11-12 08:00": {
-      "first_pushed": "2026-11-12 13:03:41",
-      "symbol": "ARIAUSDT",
-      "exchange": "binance",
-      "status": "观察",
-      "tier": "watch",
-      "suppressed": "daily_cap"
-    },
-    "1h|SOLUSDT|观望|2026-11-12 01:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "SOLUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|HYPEUSDT|观望|2026-11-12 01:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "HYPEUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|PUMPUSDT|观望|2026-11-11 23:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "PUMPUSDT",
-      "exchange": "binance",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|SOL-USDT-SWAP|观望|2026-11-12 01:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "SOL-USDT-SWAP",
-      "exchange": "okx",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|HYPE-USDT-SWAP|观望|2026-11-12 01:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "HYPE-USDT-SWAP",
-      "exchange": "okx",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|PUMP-USDT-SWAP|观望|2026-11-11 23:00": {
-      "first_pushed": "2026-11-12 15:04:02",
-      "symbol": "PUMP-USDT-SWAP",
-      "exchange": "okx",
-      "status": "观望",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "1h|ADAUSDT|可入场|2026-11-11 23:00": {
-      "first_pushed": "2026-11-12 22:04:31",
-      "symbol": "ADAUSDT",
-      "exchange": "binance",
-      "status": "可入场",
-      "tier": "htf",
-      "timeframe": "1h"
-    },
-    "nested|15m|EDGEUSDT|已破位·等回踩|2026-11-13 03:15": {
-      "first_pushed": "2026-11-13 08:56:04",
-      "symbol": "EDGEUSDT",
-      "exchange": "binance",
-      "status": "已破位·等回踩",
-      "tier": "nested",
-      "timeframe": "15m"
-    },
-    "4h|PIEVERSEUSDT|可入场|2026-11-10 00:00": {
-      "first_pushed": "2026-11-13 15:58:15",
-      "symbol": "PIEVERSEUSDT",
-      "exchange": "binance",
-      "status": "可入场",
-      "tier": "htf",
-      "timeframe": "4h"
-    },
-    "4h|EDGEUSDT|可入场|2026-11-10 00:00": {
-      "first_pushed": "2026-11-13 15:58:15",
-      "symbol": "EDGEUSDT",
-      "exchange": "binance",
-      "status": "可入场",
-      "tier": "htf",
-      "timeframe": "4h"
-    },
-    "ARBUSDT|观察|2026-11-13 15:45|2026-11-13 22:30|2026-11-14 01:30": {
-      "first_pushed": "2026-11-14 04:33:52",
-      "symbol": "ARBUSDT",
-      "exchange": "binance",
-      "status": "观察",
-      "tier": "watch"
-    },
     "NEARUSDT|可入场|2026-11-13 15:15|2026-11-13 21:30|2026-11-14 00:15": {
       "first_pushed": "2026-11-14 09:02:55",
       "symbol": "NEARUSDT",
@@ -418,6 +288,14 @@
       "exchange": "okx",
       "status": "已破位·等回踩",
       "tier": "v6"
+    },
+    "4h|TRXUSDT|已破位·等回踩|2026-11-24 00:00": {
+      "first_pushed": "2026-11-28 05:42:24",
+      "symbol": "TRXUSDT",
+      "exchange": "binance",
+      "status": "已破位·等回踩",
+      "tier": "htf",
+      "timeframe": "4h"
     }
   }
 }
